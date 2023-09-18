@@ -1,5 +1,6 @@
 package gestioninventariotienda;
 
+import Modelo.Conexion;
 import java.text.DecimalFormat;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -19,14 +20,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -40,91 +42,35 @@ public class Ventas extends javax.swing.JPanel {
     PreparedStatement pst;
     ResultSet rs;
     
+    public List<CatalogoProductos.Producto> carrito = new ArrayList<>();
+    
     public Ventas() {
         initComponents();
-        Connect();
-        cargarCamposNoEditar();
     }
     
-    public void Connect(){
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/db_smart_shop_inventory_manager", "root", "rootpass");
-        } catch (ClassNotFoundException | SQLException ex){
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private void cargarCamposNoEditar() {
-        try {
-            pst = con.prepareStatement("SELECT numero_movimiento FROM movimiento_inventario WHERE tipo_movimiento = ? ORDER BY id DESC LIMIT 1");
-            pst.setString(1, "Venta");
-            rs = pst.executeQuery();
+    public void LlenarCampos(int numeroVenta, float totalCarrito, List<CatalogoProductos.Producto> carrito) {
+        txtNumeroVenta.setText(String.valueOf(numeroVenta));
+        txtTotalCarrito.setText(String.valueOf(totalCarrito));
+        
+        this.carrito = carrito;
+        
+        DefaultTableModel df = (DefaultTableModel) jTable1.getModel();
+        df.setRowCount(0);
 
-            if (rs.next()) {
-                int numeroMovimiento = rs.getInt("numero_movimiento");
-                float totalTemporal = 0;
-                
-                PreparedStatement pst2 = con.prepareStatement("SELECT cantidad, precio FROM movimiento_inventario WHERE numero_movimiento = ? AND tipo_movimiento = ?");
-                pst2.setInt(1, numeroMovimiento);
-                pst2.setString(2, "Venta");
-                ResultSet rs2 = pst2.executeQuery();
+        DecimalFormat dc = new DecimalFormat("#.00");
 
-                while (rs2.next()) {
-                    int cantidad = rs2.getInt("cantidad");
-                    float precio = rs2.getFloat("precio");
-                    float subtotal = cantidad * precio;
-                    totalTemporal += subtotal;
-                }
+        for (CatalogoProductos.Producto producto : carrito) {
+            Vector v2 = new Vector();
 
-                rs2.close();
-                pst2.close();
+            v2.add(producto.getCodigo());
+            v2.add(producto.getNombre());
+            v2.add(producto.getCantidad());
+            v2.add(dc.format(producto.getPrecio()));
 
-                txtTotalCarrito.setText(Float.toString(totalTemporal));
-                txtNumeroVenta.setText(Integer.toString(numeroMovimiento));
-                MostrarInventarioCompra(numeroMovimiento);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private void MostrarInventarioCompra(int numeroMovimiento){
-        try{
-            int q;
-            pst = con.prepareStatement("SELECT * FROM movimiento_inventario WHERE numero_movimiento = ? AND tipo_movimiento = ?");
-            pst.setInt(1, numeroMovimiento);
-            pst.setString(1, "Venta");
-            rs = pst.executeQuery();
-            ResultSetMetaData rss = rs.getMetaData();
-            q = rss.getColumnCount();
-            
-            DefaultTableModel df = (DefaultTableModel)jTable1.getModel();
-            df.setRowCount(0);
-            
-            while (rs.next()){
-                Vector v2 = new Vector();
-                for (int a = 0; a < 10; a++){
-                    v2.add(rs.getString("codigo_producto"));
-                    v2.add(rs.getString("nombre_producto"));
-                    v2.add(rs.getString("cantidad"));
-                    
-                    float precio = Float.parseFloat(rs.getString("precio"));
-                    DecimalFormat dc = new DecimalFormat("#.00");
-                    String precioFormateado = dc.format(precio);
+            float total = producto.getCantidad() * producto.getPrecio();
+            v2.add(dc.format(total));
 
-                    v2.add(precioFormateado);
-                    
-                    float cantidad = Float.parseFloat(rs.getString("cantidad"));
-                    float total = cantidad * precio;
-                    String totalFormateado = dc.format(total);
-
-                    v2.add(totalFormateado);
-                }
-                df.addRow(v2);
-            }
-        } catch (SQLException ex){
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            df.addRow(v2);
         }
     }
         
@@ -137,6 +83,8 @@ public class Ventas extends javax.swing.JPanel {
             int nit = Integer.parseInt(txtNITCliente.getText());
             String tipoCliente = cbTipoCliente.getSelectedItem().toString();
             
+            Conexion conexion1 = new Conexion();
+            con = conexion1.Connect();
             pst = con.prepareStatement("INSERT INTO clientes (nombre_cliente, telefono, direccion, nit, tipo_cliente) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, nombre);
             pst.setInt(2, telefono);
@@ -147,7 +95,6 @@ public class Ventas extends javax.swing.JPanel {
             int result = pst.executeUpdate();
 
             if (result == 1) {
-                JOptionPane.showMessageDialog(this, "Cliente Registrado Exitosamente");
                 ResultSet generatedKeys = pst.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     idCliente = generatedKeys.getInt(1);
@@ -293,6 +240,62 @@ public class Ventas extends javax.swing.JPanel {
         }
     }
     
+    public void guardarProductos(String tipoMovimiento, int numeroMovimiento, List<CatalogoProductos.Producto> carrito) {
+        try (Connection con = new Conexion().Connect()) {
+            String insertQuery = "INSERT INTO movimiento_inventario (tipo_movimiento, numero_movimiento, codigo_producto, nombre_producto, cantidad, precio, fecha_movimiento) VALUES (?,?,?,?,?,?,NOW())";
+            try (PreparedStatement pst = con.prepareStatement(insertQuery)) {
+                for (CatalogoProductos.Producto producto : carrito) {
+                    pst.setString(1, tipoMovimiento);
+                    pst.setInt(2, numeroMovimiento);
+                    pst.setInt(3, producto.getCodigo());
+                    pst.setString(4, producto.getNombre());
+                    pst.setInt(5, producto.getCantidad());
+                    pst.setFloat(6, producto.getPrecio());
+                    pst.executeUpdate();
+                }
+            }
+            
+            for (CatalogoProductos.Producto producto : carrito) {
+                int codigoProducto = producto.getCodigo();
+                int cantiadProducto = producto.getCantidad();
+                actualizarStock(con, codigoProducto, cantiadProducto);
+            }
+        } catch (SQLException ex) { 
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void actualizarStock(Connection con, int codigoProducto, int cantidadProducto) {
+        int cantidadProductoBD = 0;
+        int cantidadTotal = 0;
+        try {
+            pst = con.prepareStatement("SELECT cantidad_existente FROM inventario WHERE codigo_producto=?");
+            pst.setInt(1, codigoProducto);
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                cantidadProductoBD = rs.getInt(1);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontro el producto");
+                return;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            pst = con.prepareStatement("UPDATE inventario SET cantidad_existente=? WHERE codigo_producto=?");
+            cantidadTotal = cantidadProductoBD - cantidadProducto;
+            pst.setInt(1, cantidadTotal);
+            pst.setInt(2, codigoProducto);
+            if (pst.executeUpdate() == 1) {
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -325,13 +328,10 @@ public class Ventas extends javax.swing.JPanel {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Codigo Producto", "Nombre", "Cantidad", "Precio", "Total"
+                "Codigo Producto", "Nombre", "Cantidad", "Precio", "Sub Total"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -501,8 +501,8 @@ public class Ventas extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -513,22 +513,39 @@ public class Ventas extends javax.swing.JPanel {
             float totalCarrito = Float.parseFloat(txtTotalCarrito.getText());
             int idCliente = crearCliente();
             
+            Conexion conexion1 = new Conexion();
+            con = conexion1.Connect();
+            guardarProductos("Venta", numeroVenta,carrito);
             pst = con.prepareStatement("INSERT INTO ventas (numero_venta, id_cliente, metodo_pago, total, fecha_venta) VALUES (?,?,?,?,NOW())");
-
+            
             pst.setInt(1, numeroVenta);
             pst.setInt(2, idCliente);
             pst.setString(3, metodoPago);
             pst.setFloat(4, totalCarrito);
-
+            
             if (pst.executeUpdate() == 1) {
-                reciboVenta(numeroVenta);
                 JOptionPane.showMessageDialog(this, "Venta Registrada Exitosamente");
+                reciboVenta(numeroVenta);
                 txtNombreCliente.setText("");
                 txtTelefonoCliente.setText("");
                 txtDireccionCliente.setText("");
                 txtNITCliente.setText("");
                 txtNumeroVenta.setText("");
                 txtTotalCarrito.setText("");
+                
+                JFrame frame = new JFrame("Catalogo de Productos");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                Menu menuPrincipal = new Menu();
+                frame.getContentPane().add(menuPrincipal);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+
+                // Cerrar la ventana actual
+                Window window = SwingUtilities.getWindowAncestor(this);
+                if (window instanceof JFrame) {
+                    ((JFrame) window).dispose();
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "Error al Registrar la Venta");
             }
@@ -536,7 +553,7 @@ public class Ventas extends javax.swing.JPanel {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnVenderActionPerformed
-
+    
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         JFrame frame = new JFrame("Menu Principal");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

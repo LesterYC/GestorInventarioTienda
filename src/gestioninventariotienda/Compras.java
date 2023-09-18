@@ -1,5 +1,6 @@
 package gestioninventariotienda;
 
+import Modelo.Conexion;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -25,7 +26,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,86 +42,35 @@ public class Compras extends javax.swing.JPanel {
     Connection con;
     PreparedStatement pst;
     ResultSet rs;
+    public List<CatalogoProductos.Producto> carrito = new ArrayList<>();
     
     public Compras() {
         initComponents();
-        Connect();
-        cargarCamposNoEditar();
-    }
-
-    public void Connect(){
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/db_smart_shop_inventory_manager", "root", "rootpass");
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
-    private void cargarCamposNoEditar() {
-        try {
-            pst = con.prepareStatement("SELECT numero_movimiento FROM movimiento_inventario WHERE tipo_movimiento = ? ORDER BY id DESC LIMIT 1");
-            pst.setString(1, "Compra");
-            rs = pst.executeQuery();
+    public void LlenarCampos(int numeroCompra, float totalCarrito, List<CatalogoProductos.Producto> carrito) {
+        txtNumeroCompra.setText(String.valueOf(numeroCompra));
+        txtTotalCarrito.setText(String.valueOf(totalCarrito));
+        
+        this.carrito = carrito;
+        
+        DefaultTableModel df = (DefaultTableModel) jTable1.getModel();
+        df.setRowCount(0);
 
-            if (rs.next()) {
-                int numeroMovimiento = rs.getInt("numero_movimiento");
-                float totalTemporal = 0;
-                
-                PreparedStatement pst2 = con.prepareStatement("SELECT cantidad, precio FROM movimiento_inventario WHERE numero_movimiento = ? AND tipo_movimiento = ?");
-                pst2.setInt(1, numeroMovimiento);
-                pst2.setString(2, "Compra");
-                ResultSet rs2 = pst2.executeQuery();
+        DecimalFormat dc = new DecimalFormat("#.00");
 
-                while (rs2.next()) {
-                    int cantidad = rs2.getInt("cantidad");
-                    float precio = rs2.getFloat("precio");
-                    float subtotal = cantidad * precio;
-                    totalTemporal += subtotal;
-                }
+        for (CatalogoProductos.Producto producto : carrito) {
+            Vector v2 = new Vector();
 
-                rs2.close();
-                pst2.close();
-                
-                txtTotalCarrito.setText(Float.toString(totalTemporal));
-                txtNumeroCompra.setText(Integer.toString(numeroMovimiento));
-                MostrarInventarioCompra(numeroMovimiento);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private void MostrarInventarioCompra(int numeroMovimiento){
-        try{
-            int q;
-            pst = con.prepareStatement("SELECT * FROM movimiento_inventario WHERE numero_movimiento = ? AND tipo_movimiento = ?");
-            pst.setInt(1, numeroMovimiento);
-            pst.setString(2, "Compra");
-            rs = pst.executeQuery();
-            ResultSetMetaData rss = rs.getMetaData();
-            q = rss.getColumnCount();
-            
-            DefaultTableModel df = (DefaultTableModel)jTable1.getModel();
-            df.setRowCount(0);
-            
-            while (rs.next()) {
-                Vector v2 = new Vector();
-                for (int a = 0; a < 10; a++) {
-                    v2.add(rs.getString("codigo_producto"));
-                    v2.add(rs.getString("nombre_producto"));
-                    v2.add(rs.getString("cantidad"));
+            v2.add(producto.getCodigo());
+            v2.add(producto.getNombre());
+            v2.add(producto.getCantidad());
+            v2.add(dc.format(producto.getPrecio()));
 
-                    float precio = Float.parseFloat(rs.getString("precio"));
-                    v2.add(precio);
-                    float cantidad = Float.parseFloat(rs.getString("cantidad"));
-                    float total = cantidad * precio;
-                    v2.add(total);
-                }
-                df.addRow(v2);
-            }
-        } catch (SQLException ex){
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            float total = producto.getCantidad() * producto.getPrecio();
+            v2.add(dc.format(total));
+
+            df.addRow(v2);
         }
     }
     
@@ -258,6 +210,62 @@ public class Compras extends javax.swing.JPanel {
         }
     }
     
+    public void guardarProductos(String tipoMovimiento, int numeroMovimiento, List<CatalogoProductos.Producto> carrito) {
+        try (Connection con = new Conexion().Connect()) {
+            String insertQuery = "INSERT INTO movimiento_inventario (tipo_movimiento, numero_movimiento, codigo_producto, nombre_producto, cantidad, precio, fecha_movimiento) VALUES (?,?,?,?,?,?,NOW())";
+            try (PreparedStatement pst = con.prepareStatement(insertQuery)) {
+                for (CatalogoProductos.Producto producto : carrito) {
+                    pst.setString(1, tipoMovimiento);
+                    pst.setInt(2, numeroMovimiento);
+                    pst.setInt(3, producto.getCodigo());
+                    pst.setString(4, producto.getNombre());
+                    pst.setInt(5, producto.getCantidad());
+                    pst.setFloat(6, producto.getPrecio());
+                    pst.executeUpdate();
+                }
+            }
+            
+            for (CatalogoProductos.Producto producto : carrito) {
+                int codigoProducto = producto.getCodigo();
+                int cantiadProducto = producto.getCantidad();
+                actualizarStock(con, codigoProducto, cantiadProducto);
+            }
+        } catch (SQLException ex) { 
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void actualizarStock(Connection con, int codigoProducto, int cantidadProducto) {
+        int cantidadProductoBD = 0;
+        int cantidadTotal = 0;
+        try {
+            pst = con.prepareStatement("SELECT cantidad_existente FROM inventario WHERE codigo_producto=?");
+            pst.setInt(1, codigoProducto);
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                cantidadProductoBD = rs.getInt(1);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontro el producto");
+                return;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            pst = con.prepareStatement("UPDATE inventario SET cantidad_existente=? WHERE codigo_producto=?");
+            cantidadTotal = cantidadProductoBD + cantidadProducto;
+            pst.setInt(1, cantidadTotal);
+            pst.setInt(2, codigoProducto);
+            if (pst.executeUpdate() == 1) {
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -331,10 +339,7 @@ public class Compras extends javax.swing.JPanel {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Codigo Producto", "Nombre", "Cantidad", "Precio", "Sub Total"
@@ -427,6 +432,9 @@ public class Compras extends javax.swing.JPanel {
             String metodoPago = cbMetodoPago.getSelectedItem().toString();
             Float totalCarrito = Float.valueOf(txtTotalCarrito.getText());
             
+            Conexion conexion1 = new Conexion();
+            con = conexion1.Connect();
+            guardarProductos("Compra", numeroCompra,carrito);
             pst = con.prepareStatement("INSERT INTO compras (numero_compra, nombre_proveedor, metodo_pago, total, fecha_compra) VALUES (?,?,?,?,NOW())");
             pst.setInt(1, numeroCompra);
             pst.setString(2, nombreProveedor);
@@ -439,6 +447,19 @@ public class Compras extends javax.swing.JPanel {
                 txtNumeroCompra.setText("");
                 txtNombreProveedor.setText("");
                 txtTotalCarrito.setText("");
+                
+                JFrame frame = new JFrame("Catalogo de Productos");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                Menu menuPrincipal = new Menu();
+                frame.getContentPane().add(menuPrincipal);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+                
+                Window window = SwingUtilities.getWindowAncestor(this);
+                if (window instanceof JFrame) {
+                    ((JFrame) window).dispose();
+                }
             } else{
                 JOptionPane.showMessageDialog(this, "Error al Agregar la Compra");
             }

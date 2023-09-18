@@ -160,17 +160,25 @@ public class EliminarProducto extends javax.swing.JPanel {
             pst = con.prepareStatement("DELETE FROM inventario WHERE codigo_producto=?");
             pst.setInt(1, codigoProducto);
             
-            if (pst.executeUpdate() == 1){
+            if (pst.executeUpdate() == 1){                
                 JOptionPane.showMessageDialog(this, "Producto Eliminado Correctamente");
                 txtCodigoProducto.setText("");
                 txtCodigoProducto.requestFocus();
                 
+                JFrame frame = new JFrame("Inventario");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                MostrarInventario inventario = new MostrarInventario();
+                frame.getContentPane().add(inventario);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+
                 Window window = SwingUtilities.getWindowAncestor(this);
                 if (window instanceof JFrame) {
                     ((JFrame) window).dispose();
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Fallo la Eliminacion del Producto");
+                JOptionPane.showMessageDialog(this, "El Producto No Existe");
             }
         } catch (SQLException ex){
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
@@ -178,6 +186,14 @@ public class EliminarProducto extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        JFrame frame = new JFrame("Inventario");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        MostrarInventario inventario = new MostrarInventario();
+        frame.getContentPane().add(inventario);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();

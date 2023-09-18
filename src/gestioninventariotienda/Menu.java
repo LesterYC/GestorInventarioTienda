@@ -1,10 +1,23 @@
 package gestioninventariotienda;
 
+import Modelo.Conexion;
+import gestioninventariotienda.CatalogoProductos.Producto;
 import java.awt.Window;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class Menu extends javax.swing.JPanel {
+    Connection con;
+    PreparedStatement pst;
+    ResultSet rs;
     
     public Menu() {
         initComponents();
@@ -13,7 +26,7 @@ public class Menu extends javax.swing.JPanel {
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                JFrame frame = new JFrame("Inicio Sesion");
+                JFrame frame = new JFrame("Inicio de Sesion");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 Login inicioSesion = new Login();
                 frame.getContentPane().add(inicioSesion);
@@ -22,6 +35,26 @@ public class Menu extends javax.swing.JPanel {
                 frame.setVisible(true);
             }
         });
+    }
+    
+    private int NumeroPedido(String tipoOperacion){
+        int numeroOden = 0;
+        String tipoNumeroOrden = (tipoOperacion.equals("Ventas"))?"numero_venta":"numero_compra";
+        try{
+            Conexion conexion1 = new Conexion();
+            con = conexion1.Connect();
+            pst = con.prepareStatement("SELECT "+tipoNumeroOrden+" FROM "+tipoOperacion+" ORDER BY id DESC LIMIT 1");
+            rs = pst.executeQuery();
+            
+            if (rs.next()) {
+                numeroOden = rs.getInt(tipoNumeroOrden)+1;
+            } else {
+                numeroOden = 1;
+            }
+        } catch (SQLException ex){
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return numeroOden;
     }
 
     @SuppressWarnings("unchecked")
@@ -138,7 +171,7 @@ public class Menu extends javax.swing.JPanel {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jLabel2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 939, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 891, Short.MAX_VALUE)
                 .addComponent(btnCerrarSesion)
                 .addGap(19, 19, 19))
         );
@@ -160,7 +193,7 @@ public class Menu extends javax.swing.JPanel {
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 947, Short.MAX_VALUE))
+                .addGap(0, 899, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,13 +217,16 @@ public class Menu extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprasActionPerformed
-        JFrame frame = new JFrame("Registrar Compras");
+        JFrame frame = new JFrame("Catalogo de Productos");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        CatalogoProductos carritoCompras = new CatalogoProductos();
+        List<Producto> carritoInicial = new ArrayList<>();
+        CatalogoProductos carritoCompras = new CatalogoProductos(carritoInicial);
         frame.getContentPane().add(carritoCompras);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        int numeroPedido = NumeroPedido("Compras");
+        carritoCompras.LlenadoCampos("Compra", numeroPedido);
         
         // Cerrar la ventana actual
         Window window = SwingUtilities.getWindowAncestor(this);
@@ -200,13 +236,16 @@ public class Menu extends javax.swing.JPanel {
     }//GEN-LAST:event_btnComprasActionPerformed
     
     private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
-        JFrame frame = new JFrame("Registar Ventas");
+        JFrame frame = new JFrame("Catalogo de Productos");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        CatalogoProductos carritoCompras = new CatalogoProductos();
+        List<Producto> carritoInicial = new ArrayList<>();
+        CatalogoProductos carritoCompras = new CatalogoProductos(carritoInicial);
         frame.getContentPane().add(carritoCompras);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        int numeroPedido = NumeroPedido("Ventas");
+        carritoCompras.LlenadoCampos("Venta", numeroPedido);
         
         // Cerrar la ventana actual
         Window window = SwingUtilities.getWindowAncestor(this);
@@ -216,7 +255,7 @@ public class Menu extends javax.swing.JPanel {
     }//GEN-LAST:event_btnVentasActionPerformed
 
     private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
-        JFrame frame = new JFrame("Productos");
+        JFrame frame = new JFrame("Inventario");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MostrarInventario inventario = new MostrarInventario();
         frame.getContentPane().add(inventario);

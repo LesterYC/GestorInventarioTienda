@@ -42,7 +42,6 @@ public class ActualizarCliente extends javax.swing.JPanel {
         jPanel10 = new javax.swing.JPanel();
         btnActualizarCliente = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        btnBuscarCliente = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
         txtNombreCliente = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -74,35 +73,21 @@ public class ActualizarCliente extends javax.swing.JPanel {
             }
         });
 
-        btnBuscarCliente.setText("Buscar");
-        btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarClienteClienteActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addGap(273, 273, 273)
-                        .addComponent(btnBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addGap(181, 181, 181)
-                        .addComponent(btnActualizarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(57, 57, 57)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(181, 181, 181)
+                .addComponent(btnActualizarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(194, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnActualizarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -297,18 +282,14 @@ public class ActualizarCliente extends javax.swing.JPanel {
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
     private void txtNombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreClienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreClienteActionPerformed
-
-    private void btnBuscarClienteClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteClienteActionPerformed
         try{
-            String idUsuario = txtIDCliente.getText();
-            pst = con.prepareStatement("SELECT * FROM clientes WHERE id=?");
-            pst.setString(1, idUsuario);
+            String nombreUsuario = txtNombreCliente.getText();
+            pst = con.prepareStatement("SELECT * FROM clientes WHERE nombre_cliente=?");
+            pst.setString(1, nombreUsuario);
             rs=pst.executeQuery();
 
             if (rs.next()==true){
-                txtNombreCliente.setText(rs.getString(2));
+                txtIDCliente.setText(rs.getString(1));
                 txtTelefono.setText(rs.getString(3));
                 String tipoClienteBD = rs.getString(6);
 
@@ -321,12 +302,12 @@ public class ActualizarCliente extends javax.swing.JPanel {
                 txtDireccion.setText(rs.getString(4));
                 txtNitCliente.setText(rs.getString(5));
             } else{
-                JOptionPane.showMessageDialog(this, "Fallo la consulta de datos");
+                JOptionPane.showMessageDialog(this, "No se encontro el cliente");
             }
         } catch (SQLException ex){
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnBuscarClienteClienteActionPerformed
+    }//GEN-LAST:event_txtNombreClienteActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         Window window = SwingUtilities.getWindowAncestor(this);
@@ -373,34 +354,48 @@ public class ActualizarCliente extends javax.swing.JPanel {
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void txtIDClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDClienteActionPerformed
-        // TODO add your handling code here:
+        try{
+            String idUsuario = txtIDCliente.getText();
+            pst = con.prepareStatement("SELECT * FROM clientes WHERE id=?");
+            pst.setString(1, idUsuario);
+            rs=pst.executeQuery();
+
+            if (rs.next()==true){
+                txtNombreCliente.setText(rs.getString(2));
+                txtTelefono.setText(rs.getString(3));
+                String tipoClienteBD = rs.getString(6);
+
+                for (int i = 0; i < txtTipoCliente.getItemCount(); i++) {
+                    if (txtTipoCliente.getItemAt(i).equals(tipoClienteBD)) {
+                        txtTipoCliente.setSelectedIndex(i);
+                        break;
+                    }
+                }
+                txtDireccion.setText(rs.getString(4));
+                txtNitCliente.setText(rs.getString(5));
+            } else{
+                JOptionPane.showMessageDialog(this, "Fallo la consulta de datos");
+            }
+        } catch (SQLException ex){
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_txtIDClienteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnActualizarCliente;
-    private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
-    private javax.swing.JTextField txtCodigoProducto;
-    private javax.swing.JTextField txtCodigoProducto1;
     private javax.swing.JTextField txtDireccion;
     private javax.swing.JTextField txtIDCliente;
     private javax.swing.JTextField txtNitCliente;

@@ -16,6 +16,7 @@ public class RegistrarProducto extends javax.swing.JPanel {
     
     Connection con;
     PreparedStatement pst;
+    ResultSet rs;
     
     public RegistrarProducto() {
         initComponents();
@@ -243,6 +244,14 @@ public class RegistrarProducto extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        JFrame frame = new JFrame("Inventario");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        MostrarInventario inventario = new MostrarInventario();
+        frame.getContentPane().add(inventario);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();
@@ -258,31 +267,48 @@ public class RegistrarProducto extends javax.swing.JPanel {
             float precioUnitario = Float.parseFloat(txtPrecioUnitario.getText());
             precioUnitario = Math.round(precioUnitario * 100) / 100.0f;
             Date fechaVencimiento = Date.valueOf(txtFechaVencimiento.getText());
-            pst = con.prepareStatement("INSERT INTO inventario (codigo_producto, nombre_producto, cantidad_existente, tipo_tarifa, precio_unitario, fecha_vencimiento) VALUES (?,?,?,?,?,?);");
-            pst.setInt(1, codigoProducto);
-            pst.setString(2, nombreProducto);
-            pst.setInt(3, cantidadProducto);
-            pst.setString(4, tipoTarifa);
-            pst.setFloat(5, precioUnitario);
-            pst.setDate(6, fechaVencimiento);
             
-            if (pst.executeUpdate()== 1){
-                JOptionPane.showMessageDialog(this, "Producto Guardado");
-                txtCodigoProducto.setText("");
-                txtNombreProducto.setText("");
-                txtCantidadProducto.setText(""); 
-                txtPrecioUnitario.setText("");
-                txtFechaVencimiento.setText("");
+            pst = con.prepareStatement("SELECT * FROM inventario WHERE codigo_producto=?");
+            pst.setInt(1, codigoProducto);
+            rs=pst.executeQuery();
+            
+            if (rs.next()==true){
+                JOptionPane.showMessageDialog(this, "El Producto Ya Existe!!");
             } else{
-                JOptionPane.showMessageDialog(this, "Error al guardar");
+                pst = con.prepareStatement("INSERT INTO inventario (codigo_producto, nombre_producto, cantidad_existente, tipo_tarifa, precio_unitario, fecha_vencimiento) VALUES (?,?,?,?,?,?);");
+                pst.setInt(1, codigoProducto);
+                pst.setString(2, nombreProducto);
+                pst.setInt(3, cantidadProducto);
+                pst.setString(4, tipoTarifa);
+                pst.setFloat(5, precioUnitario);
+                pst.setDate(6, fechaVencimiento);
+
+                if (pst.executeUpdate()== 1){
+                    JOptionPane.showMessageDialog(this, "Producto Guardado Correctamente");
+                    txtCodigoProducto.setText("");
+                    txtNombreProducto.setText("");
+                    txtCantidadProducto.setText(""); 
+                    txtPrecioUnitario.setText("");
+                    txtFechaVencimiento.setText("");
+
+                    JFrame frame = new JFrame("Invetario");
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    MostrarInventario inventario = new MostrarInventario();
+                    frame.getContentPane().add(inventario);
+                    frame.pack();
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
+
+                    Window window = SwingUtilities.getWindowAncestor(this);
+                    if (window instanceof JFrame) {
+                        ((JFrame) window).dispose();
+                    }
+                } else{
+                    JOptionPane.showMessageDialog(this, "Error al guardar");
+                }
             }
         } catch (SQLException ex){
             Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        Window window = SwingUtilities.getWindowAncestor(this);
-        if (window instanceof JFrame) {
-            ((JFrame) window).dispose();
         }
     }//GEN-LAST:event_btnGuardarProductoActionPerformed
 
