@@ -1,6 +1,5 @@
 package gestioninventariotienda;
 
-import Reportes.Excel;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -93,7 +92,7 @@ public class Reportes extends javax.swing.JPanel {
             anchor.setCol1(0);
             anchor.setRow1(1);
             Picture pict = draw.createPicture(anchor, imgIndex);
-            pict.resize(1, 3);
+            pict.resize(1, 5);
             
             CellStyle tituloEstilo = book.createCellStyle();
             tituloEstilo.setAlignment(HorizontalAlignment.CENTER);
@@ -108,7 +107,7 @@ public class Reportes extends javax.swing.JPanel {
             Cell celdaTitulo = filaTitulo.createCell(1);
             celdaTitulo.setCellStyle(tituloEstilo);
             celdaTitulo.setCellValue(tipoReporte);
-            sheet.addMergedRegion(new CellRangeAddress(1, 2, 1, 3));
+            sheet.addMergedRegion(new CellRangeAddress(1, 5, 1, 6));
             
             String[] cabecera = new String[]{"Tipo de Pedido","Numero de Pedido","Codigo de Producto","Nombre de Producto","Cantidad","Precio","Fecha de Pedido"};
             
@@ -127,20 +126,21 @@ public class Reportes extends javax.swing.JPanel {
             font.setFontHeightInPoints((short)12);
             headerStyle.setFont(font);
             
-            Row filaEncabezados = sheet.createRow(4);
+            Row filaEncabezados = sheet.createRow(6);
             for (int i = 0; i < cabecera.length; i++){
                 Cell celdaEncabezado = filaEncabezados.createCell(i);
                 celdaEncabezado.setCellStyle(headerStyle);
                 celdaEncabezado.setCellValue(cabecera[i]);
             }
             
-            int numFilaDatos = 5;
+            int numFilaDatos = 7;
             
             CellStyle datosEstilos = book.createCellStyle();
             datosEstilos.setBorderBottom(BorderStyle.THIN);
             datosEstilos.setBorderLeft(BorderStyle.THIN);
             datosEstilos.setBorderRight(BorderStyle.THIN);
             datosEstilos.setBorderBottom(BorderStyle.THIN);
+            datosEstilos.setAlignment(HorizontalAlignment.LEFT);
             
             pst = con.prepareStatement(sql);
             rs = pst.executeQuery();
@@ -193,10 +193,8 @@ public class Reportes extends javax.swing.JPanel {
             
             book.write(fileOut);
             fileOut.close();
-            JOptionPane.showMessageDialog(this, tipoReporte+" Generado Correctamente");
-        } catch (IOException ex){
-            Logger.getLogger(Excel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex){
+            JOptionPane.showMessageDialog(this, tipoReporte+" generado correctamente");
+        }catch (SQLException | IOException ex){
             Logger.getLogger(Reportes.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -314,7 +312,7 @@ public class Reportes extends javax.swing.JPanel {
             documento.close();
             archivo.close();
             Desktop.getDesktop().open(file);
-            JOptionPane.showMessageDialog(this, tipoReporte+" Generado Correctamente");
+            JOptionPane.showMessageDialog(this, tipoReporte+" generado correctamente");
         } catch (DocumentException | IOException e){
             System.out.println(e.toString());
         }
@@ -572,7 +570,6 @@ public class Reportes extends javax.swing.JPanel {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        // Cerrar la ventana actual
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();
@@ -589,7 +586,7 @@ public class Reportes extends javax.swing.JPanel {
     private void jCalendar2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCalendar2PropertyChange
         if (evt.getOldValue() != null) {
             SimpleDateFormat ff2 = new SimpleDateFormat("yyyy-MM-dd");
-            txtFechaFinal.setText(ff2.format(jCalendar2.getCalendar().getTime())); // Cambia jCalendar1 a jCalendar2
+            txtFechaFinal.setText(ff2.format(jCalendar2.getCalendar().getTime()));
         }
     }//GEN-LAST:event_jCalendar2PropertyChange
 

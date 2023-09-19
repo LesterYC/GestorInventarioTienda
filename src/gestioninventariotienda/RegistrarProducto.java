@@ -40,8 +40,8 @@ public class RegistrarProducto extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        btnRegresar = new javax.swing.JButton();
         btnGuardarProducto = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -58,14 +58,6 @@ public class RegistrarProducto extends javax.swing.JPanel {
         txtCantidadProducto = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
 
-        btnRegresar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnRegresar.setText("Volver");
-        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegresarActionPerformed(evt);
-            }
-        });
-
         btnGuardarProducto.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnGuardarProducto.setText("Guardar");
         btnGuardarProducto.addActionListener(new java.awt.event.ActionListener() {
@@ -74,28 +66,36 @@ public class RegistrarProducto extends javax.swing.JPanel {
             }
         });
 
+        btnRegresar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnRegresar.setText("Volver");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(86, 86, 86)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(93, 93, 93)
                 .addComponent(btnGuardarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(71, 71, 71))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(11, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("REGISTRAR PRODUCTOS");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -186,7 +186,7 @@ public class RegistrarProducto extends javax.swing.JPanel {
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -195,14 +195,14 @@ public class RegistrarProducto extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
+                .addContainerGap(24, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
+                        .addGap(26, 26, 26))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26))))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(109, 109, 109))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,7 +211,7 @@ public class RegistrarProducto extends javax.swing.JPanel {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -226,7 +226,7 @@ public class RegistrarProducto extends javax.swing.JPanel {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -235,7 +235,7 @@ public class RegistrarProducto extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 19, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,8 +259,8 @@ public class RegistrarProducto extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnGuardarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProductoActionPerformed
-        try{
-            int codigoProducto = Integer.parseInt(txtCodigoProducto.getText());
+        try {
+            int codigoProducto = Integer.parseInt((txtCodigoProducto.getText().isEmpty()) ? "0" : txtCodigoProducto.getText());
             String nombreProducto = txtNombreProducto.getText();
             int cantidadProducto = Integer.parseInt(txtCantidadProducto.getText());
             String tipoTarifa = txtTipoTarifa.getSelectedItem().toString();
@@ -268,46 +268,51 @@ public class RegistrarProducto extends javax.swing.JPanel {
             precioUnitario = Math.round(precioUnitario * 100) / 100.0f;
             Date fechaVencimiento = Date.valueOf(txtFechaVencimiento.getText());
             
-            pst = con.prepareStatement("SELECT * FROM inventario WHERE codigo_producto=?");
-            pst.setInt(1, codigoProducto);
-            rs=pst.executeQuery();
-            
-            if (rs.next()==true){
-                JOptionPane.showMessageDialog(this, "El Producto Ya Existe!!");
-            } else{
-                pst = con.prepareStatement("INSERT INTO inventario (codigo_producto, nombre_producto, cantidad_existente, tipo_tarifa, precio_unitario, fecha_vencimiento) VALUES (?,?,?,?,?,?);");
+            if (codigoProducto!=0 && !nombreProducto.isEmpty() && !tipoTarifa.isEmpty() && !txtPrecioUnitario.getText().isEmpty() && !txtFechaVencimiento.getText().isEmpty()) {
+                pst = con.prepareStatement("SELECT * FROM inventario WHERE codigo_producto=?");
                 pst.setInt(1, codigoProducto);
-                pst.setString(2, nombreProducto);
-                pst.setInt(3, cantidadProducto);
-                pst.setString(4, tipoTarifa);
-                pst.setFloat(5, precioUnitario);
-                pst.setDate(6, fechaVencimiento);
+                rs = pst.executeQuery();
 
-                if (pst.executeUpdate()== 1){
-                    JOptionPane.showMessageDialog(this, "Producto Guardado Correctamente");
-                    txtCodigoProducto.setText("");
-                    txtNombreProducto.setText("");
-                    txtCantidadProducto.setText(""); 
-                    txtPrecioUnitario.setText("");
-                    txtFechaVencimiento.setText("");
+                if (rs.next() == true) {
+                    JOptionPane.showMessageDialog(this, "¡El producto ya existe!");
+                } else {
+                    pst = con.prepareStatement("INSERT INTO inventario (codigo_producto, nombre_producto, cantidad_existente, tipo_tarifa, precio_unitario, fecha_vencimiento) VALUES (?,?,?,?,?,?);");
+                    pst.setInt(1, codigoProducto);
+                    pst.setString(2, nombreProducto);
+                    pst.setInt(3, cantidadProducto);
+                    pst.setString(4, tipoTarifa);
+                    pst.setFloat(5, precioUnitario);
+                    pst.setDate(6, fechaVencimiento);
 
-                    JFrame frame = new JFrame("Invetario");
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    MostrarInventario inventario = new MostrarInventario();
-                    frame.getContentPane().add(inventario);
-                    frame.pack();
-                    frame.setLocationRelativeTo(null);
-                    frame.setVisible(true);
+                    if (pst.executeUpdate() == 1) {
+                        JOptionPane.showMessageDialog(this, "Producto Guardado Correctamente");
+                        txtCodigoProducto.setText("");
+                        txtNombreProducto.setText("");
+                        txtCantidadProducto.setText("");
+                        txtPrecioUnitario.setText("");
+                        txtFechaVencimiento.setText("");
 
-                    Window window = SwingUtilities.getWindowAncestor(this);
-                    if (window instanceof JFrame) {
-                        ((JFrame) window).dispose();
+                        JFrame frame = new JFrame("Inventario");
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        MostrarInventario inventario = new MostrarInventario();
+                        frame.getContentPane().add(inventario);
+                        frame.pack();
+                        frame.setLocationRelativeTo(null);
+                        frame.setVisible(true);
+
+                        // Cerrar la ventana actual
+                        Window window = SwingUtilities.getWindowAncestor(this);
+                        if (window instanceof JFrame) {
+                            ((JFrame) window).dispose();
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error al guardar");
                     }
-                } else{
-                    JOptionPane.showMessageDialog(this, "Error al guardar");
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Alerta", JOptionPane.WARNING_MESSAGE);
             }
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             Logger.getLogger(RegistrarProducto.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnGuardarProductoActionPerformed

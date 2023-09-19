@@ -74,15 +74,9 @@ public class Ventas extends javax.swing.JPanel {
         }
     }
         
-    private int crearCliente(){
+    private int crearCliente(String nombre, int telefono, String direccion, int nit, String tipoCliente){
         int idCliente =0;
         try {
-            String nombre = txtNombreCliente.getText();
-            int telefono = Integer.parseInt(txtTelefonoCliente.getText());
-            String direccion = txtDireccionCliente.getText();
-            int nit = Integer.parseInt(txtNITCliente.getText());
-            String tipoCliente = cbTipoCliente.getSelectedItem().toString();
-            
             Conexion conexion1 = new Conexion();
             con = conexion1.Connect();
             pst = con.prepareStatement("INSERT INTO clientes (nombre_cliente, telefono, direccion, nit, tipo_cliente) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -236,7 +230,7 @@ public class Ventas extends javax.swing.JPanel {
             archivo.close();
             Desktop.getDesktop().open(file);
         } catch (DocumentException | IOException e){
-            System.out.println(e.toString());
+            JOptionPane.showMessageDialog(null, "Error no se genero la factura", "Alerta", JOptionPane.WARNING_MESSAGE);
         }
     }
     
@@ -398,7 +392,7 @@ public class Ventas extends javax.swing.JPanel {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
-                                .addGap(0, 121, Short.MAX_VALUE))
+                                .addGap(0, 118, Short.MAX_VALUE))
                             .addComponent(txtTotalCarrito)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -412,8 +406,8 @@ public class Ventas extends javax.swing.JPanel {
                             .addComponent(txtTelefonoCliente)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel9))
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel5))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(36, 36, 36)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -444,7 +438,7 @@ public class Ventas extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel5)
-                        .addGap(1, 1, 1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtTelefonoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -460,7 +454,7 @@ public class Ventas extends javax.swing.JPanel {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cbTipoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtNITCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel6)
@@ -470,11 +464,11 @@ public class Ventas extends javax.swing.JPanel {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtNumeroVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(39, 39, 39)
+                .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVender, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -482,72 +476,81 @@ public class Ventas extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(282, 282, 282)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(30, 30, 30)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 725, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 725, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(255, 255, 255)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(12, 12, 12)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         try {
             int numeroVenta = Integer.parseInt(txtNumeroVenta.getText());
-            String metodoPago = cbMetodoPago.getSelectedItem().toString();
             float totalCarrito = Float.parseFloat(txtTotalCarrito.getText());
-            int idCliente = crearCliente();
-            
-            Conexion conexion1 = new Conexion();
-            con = conexion1.Connect();
-            guardarProductos("Venta", numeroVenta,carrito);
-            pst = con.prepareStatement("INSERT INTO ventas (numero_venta, id_cliente, metodo_pago, total, fecha_venta) VALUES (?,?,?,?,NOW())");
-            
-            pst.setInt(1, numeroVenta);
-            pst.setInt(2, idCliente);
-            pst.setString(3, metodoPago);
-            pst.setFloat(4, totalCarrito);
-            
-            if (pst.executeUpdate() == 1) {
-                JOptionPane.showMessageDialog(this, "Venta Registrada Exitosamente");
-                reciboVenta(numeroVenta);
-                txtNombreCliente.setText("");
-                txtTelefonoCliente.setText("");
-                txtDireccionCliente.setText("");
-                txtNITCliente.setText("");
-                txtNumeroVenta.setText("");
-                txtTotalCarrito.setText("");
-                
-                JFrame frame = new JFrame("Catalogo de Productos");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                Menu menuPrincipal = new Menu();
-                frame.getContentPane().add(menuPrincipal);
-                frame.pack();
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
 
-                // Cerrar la ventana actual
-                Window window = SwingUtilities.getWindowAncestor(this);
-                if (window instanceof JFrame) {
-                    ((JFrame) window).dispose();
+            String metodoPago = cbMetodoPago.getSelectedItem().toString();
+            String nombre = txtNombreCliente.getText().toLowerCase();
+            int telefono = Integer.parseInt((txtTelefonoCliente.getText().isEmpty()) ? "0" : txtTelefonoCliente.getText());
+            String direccion = txtDireccionCliente.getText();
+            int nit = Integer.parseInt((txtNITCliente.getText().isEmpty()) ? "0" : txtNITCliente.getText());
+            String tipoCliente = cbTipoCliente.getSelectedItem().toString();
+
+            if (numeroVenta != 0 && totalCarrito != 0 && !nombre.isEmpty() && !direccion.isEmpty()) {
+                int idCliente = crearCliente(nombre, telefono, direccion, nit, tipoCliente);
+
+                Conexion conexion1 = new Conexion();
+                con = conexion1.Connect();
+                guardarProductos("Venta", numeroVenta, carrito);
+                pst = con.prepareStatement("INSERT INTO ventas (numero_venta, id_cliente, metodo_pago, total, fecha_venta) VALUES (?,?,?,?,NOW())");
+
+                pst.setInt(1, numeroVenta);
+                pst.setInt(2, idCliente);
+                pst.setString(3, metodoPago);
+                pst.setFloat(4, totalCarrito);
+
+                if (pst.executeUpdate() == 1) {
+                    JOptionPane.showMessageDialog(this, "Venta Registrada Exitosamente");
+                    reciboVenta(numeroVenta);
+                    txtNombreCliente.setText("");
+                    txtTelefonoCliente.setText("");
+                    txtDireccionCliente.setText("");
+                    txtNITCliente.setText("");
+                    txtNumeroVenta.setText("");
+                    txtTotalCarrito.setText("");
+                    JFrame frame = new JFrame("Catalogo de Productos");
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    Menu menuPrincipal = new Menu();
+                    frame.getContentPane().add(menuPrincipal);
+                    frame.pack();
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
+
+                    Window window = SwingUtilities.getWindowAncestor(this);
+                    if (window instanceof JFrame) {
+                        ((JFrame) window).dispose();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al Registrar la Venta");
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Error al Registrar la Venta");
+                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos obligatorios y asegúrese de que los valores no sean cero.", "Alerta", JOptionPane.WARNING_MESSAGE);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
@@ -562,8 +565,7 @@ public class Ventas extends javax.swing.JPanel {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-        // Cerrar la ventana actual
+        
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();

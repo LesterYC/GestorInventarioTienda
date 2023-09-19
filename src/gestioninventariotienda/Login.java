@@ -125,8 +125,7 @@ public class Login extends javax.swing.JPanel {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-        // Cerrar la ventana actual
+        
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();
@@ -134,39 +133,44 @@ public class Login extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        String usuario = txtUsuario.getText();
+        String usuario = txtUsuario.getText().toLowerCase();
         String contrasena = new String(txtContrasena.getPassword());
 
-        try{
-            Conexion conexion1 = new Conexion();
-            con = conexion1.Connect();
-            pst = con.prepareStatement("SELECT * FROM usuarios");
-            rs = pst.executeQuery();
+        if (usuario.isEmpty() || contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ambos campos deben estar llenos", "Campos Vacíos", JOptionPane.WARNING_MESSAGE);
+        } else {
+            try {
+                Conexion conexion1 = new Conexion();
+                con = conexion1.Connect();
+                pst = con.prepareStatement("SELECT contrasena FROM usuarios WHERE usuario = ?");
+                pst.setString(1, usuario);
+                rs = pst.executeQuery();
 
-            while (rs.next()){
-                String usuarioBD = rs.getString("usuario");
-                String contrasenaBD = rs.getString("contrasena");
+                if (rs.next()) {
+                    String contrasenaBD = rs.getString("contrasena");
 
-                if ((usuario.equals(usuarioBD)) && (contrasena.equals(contrasenaBD))) {
-                    JFrame frame = new JFrame("Menu Principal");
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    Menu menuPrincipal = new Menu();
-                    frame.getContentPane().add(menuPrincipal);
-                    frame.pack();
-                    frame.setLocationRelativeTo(null);
-                    frame.setVisible(true);
+                    if (contrasena.equals(contrasenaBD)) {
+                        JFrame frame = new JFrame("Menu Principal");
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        Menu menuPrincipal = new Menu();
+                        frame.getContentPane().add(menuPrincipal);
+                        frame.pack();
+                        frame.setLocationRelativeTo(null);
+                        frame.setVisible(true);
 
-                    // Cerrar la ventana actual
-                    Window window = SwingUtilities.getWindowAncestor(this);
-                    if (window instanceof JFrame) {
-                        ((JFrame) window).dispose();
+                        Window window = SwingUtilities.getWindowAncestor(this);
+                        if (window instanceof JFrame) {
+                            ((JFrame) window).dispose();
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Contraseña incorrecta", "Error de Inicio de Sesión", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "¡Usuario o contraseña incorrecta!");
+                    JOptionPane.showMessageDialog(null, "Usuario incorrecto", "Error de Inicio de Sesión", JOptionPane.ERROR_MESSAGE);
                 }
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex){
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 

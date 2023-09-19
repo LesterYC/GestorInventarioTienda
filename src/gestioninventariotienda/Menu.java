@@ -228,7 +228,6 @@ public class Menu extends javax.swing.JPanel {
         int numeroPedido = NumeroPedido("Compras");
         carritoCompras.LlenadoCampos("Compra", numeroPedido);
         
-        // Cerrar la ventana actual
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();
@@ -247,7 +246,6 @@ public class Menu extends javax.swing.JPanel {
         int numeroPedido = NumeroPedido("Ventas");
         carritoCompras.LlenadoCampos("Venta", numeroPedido);
         
-        // Cerrar la ventana actual
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();
@@ -263,7 +261,6 @@ public class Menu extends javax.swing.JPanel {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         
-        // Cerrar la ventana actual
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();
@@ -279,7 +276,6 @@ public class Menu extends javax.swing.JPanel {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         
-        // Cerrar la ventana actual
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();
@@ -295,7 +291,6 @@ public class Menu extends javax.swing.JPanel {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         
-        // Cerrar la ventana actual
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();
@@ -311,7 +306,6 @@ public class Menu extends javax.swing.JPanel {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         
-        // Cerrar la ventana actual
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();
@@ -326,8 +320,7 @@ public class Menu extends javax.swing.JPanel {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-        // Cerrar la ventana actual
+        
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();

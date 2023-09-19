@@ -245,45 +245,50 @@ public class ActualizarProducto extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        try{
-            int codigProducto = Integer.parseInt(txtCodigoProducto.getText());
+        try {
+            int codigProducto = Integer.parseInt((txtCodigoProducto.getText().isEmpty()) ? "0" : txtCodigoProducto.getText());
             String nombreProducto = txtNombreProducto.getText();
             int cantidadProducto = Integer.parseInt(txtCantidadProducto.getText());
             String tarifa = txtTipoTarifa.getSelectedItem().toString();
             float precioUnitario = Float.parseFloat(txtPrecioProducto.getText());
             Date fechaVencimiento = Date.valueOf(txtFechaVencimiento.getText());
             
-            pst = con.prepareStatement("UPDATE inventario SET nombre_producto=?, cantidad_existente=?, tipo_tarifa=?, precio_unitario=?, fecha_vencimiento=? WHERE codigo_producto=?");
-            
-            pst.setString(1, nombreProducto);
-            pst.setInt(2, cantidadProducto);
-            pst.setString(3, tarifa);
-            pst.setFloat(4, precioUnitario);
-            pst.setDate(5, fechaVencimiento);
-            pst.setInt(6, codigProducto);
-            
-            if (pst.executeUpdate() == 1){
-                JOptionPane.showMessageDialog(this, "Producto Actualizado Correctamente");
-                txtCodigoProducto.setText("");
-                txtNombreProducto.setText("");
-                txtCantidadProducto.setText("");
-                txtPrecioProducto.setText("");
-                txtFechaVencimiento.setText("");
-                
-                JFrame frame = new JFrame("Inventario");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                MostrarInventario inventario = new MostrarInventario();
-                frame.getContentPane().add(inventario);
-                frame.pack();
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
+            if (codigProducto !=0 && !nombreProducto.isEmpty() && !tarifa.isEmpty() && !txtPrecioProducto.getText().isEmpty() && !txtFechaVencimiento.getText().isEmpty()) {
+                pst = con.prepareStatement("UPDATE inventario SET nombre_producto=?, cantidad_existente=?, tipo_tarifa=?, precio_unitario=?, fecha_vencimiento=? WHERE codigo_producto=?");
 
-                Window window = SwingUtilities.getWindowAncestor(this);
-                if (window instanceof JFrame) {
-                    ((JFrame) window).dispose();
+                pst.setString(1, nombreProducto);
+                pst.setInt(2, cantidadProducto);
+                pst.setString(3, tarifa);
+                pst.setFloat(4, precioUnitario);
+                pst.setDate(5, fechaVencimiento);
+                pst.setInt(6, codigProducto);
+
+                if (pst.executeUpdate() == 1) {
+                    JOptionPane.showMessageDialog(this, "Producto Actualizado Correctamente");
+                    txtCodigoProducto.setText("");
+                    txtNombreProducto.setText("");
+                    txtCantidadProducto.setText("");
+                    txtPrecioProducto.setText("");
+                    txtFechaVencimiento.setText("");
+
+                    JFrame frame = new JFrame("Inventario");
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    MostrarInventario inventario = new MostrarInventario();
+                    frame.getContentPane().add(inventario);
+                    frame.pack();
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
+
+                    // Cerrar la ventana actual
+                    Window window = SwingUtilities.getWindowAncestor(this);
+                    if (window instanceof JFrame) {
+                        ((JFrame) window).dispose();
+                    }
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Alerta", JOptionPane.WARNING_MESSAGE);
             }
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnActualizarActionPerformed

@@ -154,33 +154,41 @@ public class EliminarProducto extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        try{
-            int codigoProducto = Integer.parseInt(txtCodigoProducto.getText());
+        try {
+            int codigoProducto = Integer.parseInt((txtCodigoProducto.getText().isEmpty()) ? "0" : txtCodigoProducto.getText());
             
-            pst = con.prepareStatement("DELETE FROM inventario WHERE codigo_producto=?");
-            pst.setInt(1, codigoProducto);
-            
-            if (pst.executeUpdate() == 1){                
-                JOptionPane.showMessageDialog(this, "Producto Eliminado Correctamente");
-                txtCodigoProducto.setText("");
-                txtCodigoProducto.requestFocus();
-                
-                JFrame frame = new JFrame("Inventario");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                MostrarInventario inventario = new MostrarInventario();
-                frame.getContentPane().add(inventario);
-                frame.pack();
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
+            if (codigoProducto != 0) {
+                pst = con.prepareStatement("DELETE FROM inventario WHERE codigo_producto=?");
+                pst.setInt(1, codigoProducto);
 
-                Window window = SwingUtilities.getWindowAncestor(this);
-                if (window instanceof JFrame) {
-                    ((JFrame) window).dispose();
+                int rowsAffected = pst.executeUpdate();
+
+                if (rowsAffected == 1) {
+                    JOptionPane.showMessageDialog(this, "Producto Eliminado Correctamente");
+                    txtCodigoProducto.setText("");
+                    txtCodigoProducto.requestFocus();
+
+                    JFrame frame = new JFrame("Inventario");
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    MostrarInventario inventario = new MostrarInventario();
+                    frame.getContentPane().add(inventario);
+                    frame.pack();
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
+                    
+                    Window window = SwingUtilities.getWindowAncestor(this);
+                    if (window instanceof JFrame) {
+                        ((JFrame) window).dispose();
+                    }
+                } else if (rowsAffected == 0) {
+                    JOptionPane.showMessageDialog(this, "El producto no existe");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al eliminar el producto");
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "El Producto No Existe");
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese un código de producto válido.", "Alerta", JOptionPane.WARNING_MESSAGE);
             }
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed

@@ -147,25 +147,30 @@ public class EliminarCliente extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        try{
-            int idCliente = Integer.parseInt(txtIDCliente.getText());
+        try {
+            int idCliente = Integer.parseInt((txtIDCliente.getText().isEmpty()) ? "0" : txtIDCliente.getText());
+            
+            if (idCliente != 0) {
+                pst = con.prepareStatement("DELETE FROM clientes WHERE id=?");
+                pst.setInt(1, idCliente);
 
-            pst = con.prepareStatement("DELETE FROM clientes WHERE id=?");
-            pst.setInt(1, idCliente);
+                if (pst.executeUpdate() == 1) {
+                    JOptionPane.showMessageDialog(this, "Cliente Eliminado Correctamente");
+                    txtIDCliente.setText("");
+                    txtIDCliente.requestFocus();
 
-            if (pst.executeUpdate() == 1){
-                JOptionPane.showMessageDialog(this, "Cliente Eliminado Correctamente");
-                txtIDCliente.setText("");
-                txtIDCliente.requestFocus();
-
-                Window window = SwingUtilities.getWindowAncestor(this);
-                if (window instanceof JFrame) {
-                    ((JFrame) window).dispose();
+                    // Cerrar la ventana actual
+                    Window window = SwingUtilities.getWindowAncestor(this);
+                    if (window instanceof JFrame) {
+                        ((JFrame) window).dispose();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Fallo la Eliminación del Cliente");
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Fallo la Eliminacion del Cliente");
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese un ID válido.", "Alerta", JOptionPane.WARNING_MESSAGE);
             }
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed

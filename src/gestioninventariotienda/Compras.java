@@ -19,10 +19,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -417,8 +415,7 @@ public class Compras extends javax.swing.JPanel {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-        // Cerrar la ventana actual
+        
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();
@@ -426,44 +423,48 @@ public class Compras extends javax.swing.JPanel {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
-        try{
+        try {
             int numeroCompra = Integer.parseInt(txtNumeroCompra.getText());
             String nombreProveedor = txtNombreProveedor.getText();
             String metodoPago = cbMetodoPago.getSelectedItem().toString();
             Float totalCarrito = Float.valueOf(txtTotalCarrito.getText());
             
-            Conexion conexion1 = new Conexion();
-            con = conexion1.Connect();
-            guardarProductos("Compra", numeroCompra,carrito);
-            pst = con.prepareStatement("INSERT INTO compras (numero_compra, nombre_proveedor, metodo_pago, total, fecha_compra) VALUES (?,?,?,?,NOW())");
-            pst.setInt(1, numeroCompra);
-            pst.setString(2, nombreProveedor);
-            pst.setString(3, metodoPago);
-            pst.setFloat(4, totalCarrito);
-            
-            if (pst.executeUpdate() == 1){
-                JOptionPane.showMessageDialog(this, "Compra Agregada Correctamente");
-                reciboCompra(numeroCompra);
-                txtNumeroCompra.setText("");
-                txtNombreProveedor.setText("");
-                txtTotalCarrito.setText("");
-                
-                JFrame frame = new JFrame("Catalogo de Productos");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                Menu menuPrincipal = new Menu();
-                frame.getContentPane().add(menuPrincipal);
-                frame.pack();
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-                
-                Window window = SwingUtilities.getWindowAncestor(this);
-                if (window instanceof JFrame) {
-                    ((JFrame) window).dispose();
+            if (!nombreProveedor.isEmpty()) {
+                Conexion conexion1 = new Conexion();
+                con = conexion1.Connect();
+                guardarProductos("Compra", numeroCompra, carrito);
+                pst = con.prepareStatement("INSERT INTO compras (numero_compra, nombre_proveedor, metodo_pago, total, fecha_compra) VALUES (?,?,?,?,NOW())");
+                pst.setInt(1, numeroCompra);
+                pst.setString(2, nombreProveedor);
+                pst.setString(3, metodoPago);
+                pst.setFloat(4, totalCarrito);
+
+                if (pst.executeUpdate() == 1) {
+                    JOptionPane.showMessageDialog(this, "Compra Agregada Correctamente");
+                    reciboCompra(numeroCompra);
+                    txtNumeroCompra.setText("");
+                    txtNombreProveedor.setText("");
+                    txtTotalCarrito.setText("");
+
+                    JFrame frame = new JFrame("Catalogo de Productos");
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    Menu menuPrincipal = new Menu();
+                    frame.getContentPane().add(menuPrincipal);
+                    frame.pack();
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
+
+                    Window window = SwingUtilities.getWindowAncestor(this);
+                    if (window instanceof JFrame) {
+                        ((JFrame) window).dispose();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al Agregar la Compra");
                 }
-            } else{
-                JOptionPane.showMessageDialog(this, "Error al Agregar la Compra");
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese el nombre del proveedor.", "Alerta", JOptionPane.WARNING_MESSAGE);
             }
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnComprarActionPerformed

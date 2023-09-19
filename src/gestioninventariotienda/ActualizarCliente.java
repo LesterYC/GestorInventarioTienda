@@ -317,38 +317,41 @@ public class ActualizarCliente extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        try{
-            int idUsuario = Integer.parseInt(txtIDCliente.getText());
-            String nombreCliente = txtNombreCliente.getText();
-            int telefonoCliente = Integer.parseInt(txtTelefono.getText());
+        try {
+            int idUsuario = Integer.parseInt((txtIDCliente.getText().isEmpty()) ? "0" : txtIDCliente.getText());
+            String nombreCliente = txtNombreCliente.getText().toLowerCase();
+            int telefonoCliente = Integer.parseInt((txtTelefono.getText().isEmpty()) ? "0" : txtIDCliente.getText());
             String direccionCliente = txtDireccion.getText();
             String nitCliente = txtNitCliente.getText();
             String tipoCliente = txtTipoCliente.getSelectedItem().toString();
-
-            pst = con.prepareStatement("UPDATE clientes SET nombre_cliente=?, telefono=?, direccion=?, nit=?, tipo_cliente=? WHERE id=?");
             
-            pst.setString(1, nombreCliente);
-            pst.setInt(2, telefonoCliente);
-            pst.setString(3, direccionCliente);
-            pst.setString(4, nitCliente);
-            pst.setString(5, tipoCliente);
-            pst.setInt(6, idUsuario);
+            if (idUsuario != 0 && !nombreCliente.isEmpty() && !direccionCliente.isEmpty() && !nitCliente.isEmpty() && telefonoCliente !=0) {
+                pst = con.prepareStatement("UPDATE clientes SET nombre_cliente=?, telefono=?, direccion=?, nit=?, tipo_cliente=? WHERE id=?");
 
-            if (pst.executeUpdate() == 1){
-                JOptionPane.showMessageDialog(this, "Cliente Actualizado Correctamente");
-                txtIDCliente.setText("");
-                txtNombreCliente.setText("");
-                txtTelefono.setText("");
-                txtDireccion.setText("");
-                txtNitCliente.setText("");
-                
-                // Cerrar la ventana actual
-                Window window = SwingUtilities.getWindowAncestor(this);
-                if (window instanceof JFrame) {
-                    ((JFrame) window).dispose();
+                pst.setString(1, nombreCliente);
+                pst.setInt(2, telefonoCliente);
+                pst.setString(3, direccionCliente);
+                pst.setString(4, nitCliente);
+                pst.setString(5, tipoCliente);
+                pst.setInt(6, idUsuario);
+
+                if (pst.executeUpdate() == 1) {
+                    JOptionPane.showMessageDialog(this, "Cliente actualizado correctamente");
+                    txtIDCliente.setText("");
+                    txtNombreCliente.setText("");
+                    txtTelefono.setText("");
+                    txtDireccion.setText("");
+                    txtNitCliente.setText("");
+                    
+                    Window window = SwingUtilities.getWindowAncestor(this);
+                    if (window instanceof JFrame) {
+                        ((JFrame) window).dispose();
+                    }
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Alerta", JOptionPane.WARNING_MESSAGE);
             }
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
@@ -374,7 +377,7 @@ public class ActualizarCliente extends javax.swing.JPanel {
                 txtDireccion.setText(rs.getString(4));
                 txtNitCliente.setText(rs.getString(5));
             } else{
-                JOptionPane.showMessageDialog(this, "Fallo la consulta de datos");
+                JOptionPane.showMessageDialog(this, "¡Cliente no encontrado!");
             }
         } catch (SQLException ex){
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
