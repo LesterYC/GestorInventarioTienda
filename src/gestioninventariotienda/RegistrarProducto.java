@@ -1,9 +1,9 @@
 package gestioninventariotienda;
 
+import Modelo.Conexion;
 import java.sql.*;
 import java.awt.Window;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
@@ -20,16 +20,6 @@ public class RegistrarProducto extends javax.swing.JPanel {
     
     public RegistrarProducto() {
         initComponents();
-        Connect();
-    }
-    
-    public void Connect(){
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/db_smart_shop_inventory_manager", "root", "rootpass");
-        } catch (ClassNotFoundException | SQLException ex){
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -58,16 +48,26 @@ public class RegistrarProducto extends javax.swing.JPanel {
         txtCantidadProducto = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
 
-        btnGuardarProducto.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel2.setBackground(new java.awt.Color(0, 51, 102));
+
+        jPanel3.setBackground(new java.awt.Color(0, 51, 102));
+
+        btnGuardarProducto.setBackground(new java.awt.Color(204, 0, 0));
+        btnGuardarProducto.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnGuardarProducto.setForeground(new java.awt.Color(255, 255, 255));
         btnGuardarProducto.setText("Guardar");
+        btnGuardarProducto.setBorder(null);
         btnGuardarProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarProductoActionPerformed(evt);
             }
         });
 
-        btnRegresar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnRegresar.setBackground(new java.awt.Color(204, 0, 0));
+        btnRegresar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
         btnRegresar.setText("Volver");
+        btnRegresar.setBorder(null);
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegresarActionPerformed(evt);
@@ -96,21 +96,29 @@ public class RegistrarProducto extends javax.swing.JPanel {
         );
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setText("REGISTRAR PRODUCTOS");
 
+        jPanel4.setBackground(new java.awt.Color(0, 51, 102));
+
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Codigo Producto");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Nombre Producto");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Precio Unitario");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Tipo Tarifa");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Fecha de Vencimiento");
 
         txtTipoTarifa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mayorista", "Minorista" }));
@@ -122,6 +130,7 @@ public class RegistrarProducto extends javax.swing.JPanel {
         });
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Cantidad Producto");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -269,6 +278,8 @@ public class RegistrarProducto extends javax.swing.JPanel {
             Date fechaVencimiento = Date.valueOf(txtFechaVencimiento.getText());
             
             if (codigoProducto!=0 && !nombreProducto.isEmpty() && !tipoTarifa.isEmpty() && !txtPrecioUnitario.getText().isEmpty() && !txtFechaVencimiento.getText().isEmpty()) {
+                Conexion conexion1 = new Conexion();
+                con = conexion1.Connect();
                 pst = con.prepareStatement("SELECT * FROM inventario WHERE codigo_producto=?");
                 pst.setInt(1, codigoProducto);
                 rs = pst.executeQuery();
@@ -276,6 +287,8 @@ public class RegistrarProducto extends javax.swing.JPanel {
                 if (rs.next() == true) {
                     JOptionPane.showMessageDialog(this, "¡El producto ya existe!");
                 } else {
+                    Conexion conexion2 = new Conexion();
+                    con = conexion2.Connect();
                     pst = con.prepareStatement("INSERT INTO inventario (codigo_producto, nombre_producto, cantidad_existente, tipo_tarifa, precio_unitario, fecha_vencimiento) VALUES (?,?,?,?,?,?);");
                     pst.setInt(1, codigoProducto);
                     pst.setString(2, nombreProducto);

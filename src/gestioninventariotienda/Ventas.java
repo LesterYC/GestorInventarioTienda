@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.sql.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -237,6 +236,7 @@ public class Ventas extends javax.swing.JPanel {
     public void guardarProductos(String tipoMovimiento, int numeroMovimiento, List<CatalogoProductos.Producto> carrito) {
         try (Connection con = new Conexion().Connect()) {
             String insertQuery = "INSERT INTO movimiento_inventario (tipo_movimiento, numero_movimiento, codigo_producto, nombre_producto, cantidad, precio, fecha_movimiento) VALUES (?,?,?,?,?,?,NOW())";
+            
             try (PreparedStatement pst = con.prepareStatement(insertQuery)) {
                 for (CatalogoProductos.Producto producto : carrito) {
                     pst.setString(1, tipoMovimiento);
@@ -263,6 +263,8 @@ public class Ventas extends javax.swing.JPanel {
         int cantidadProductoBD = 0;
         int cantidadTotal = 0;
         try {
+            Conexion conexion2 = new Conexion();
+            con = conexion2.Connect();
             pst = con.prepareStatement("SELECT cantidad_existente FROM inventario WHERE codigo_producto=?");
             pst.setInt(1, codigoProducto);
             rs = pst.executeQuery();
@@ -278,6 +280,8 @@ public class Ventas extends javax.swing.JPanel {
         }
 
         try {
+            Conexion conexion3 = new Conexion();
+            con = conexion3.Connect();
             pst = con.prepareStatement("UPDATE inventario SET cantidad_existente=? WHERE codigo_producto=?");
             cantidadTotal = cantidadProductoBD - cantidadProducto;
             pst.setInt(1, cantidadTotal);
@@ -317,7 +321,10 @@ public class Ventas extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         txtTotalCarrito = new javax.swing.JTextField();
 
+        setBackground(new java.awt.Color(0, 51, 102));
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setText("REGISTRAR VENTA");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -330,26 +337,41 @@ public class Ventas extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        jPanel2.setBackground(new java.awt.Color(0, 51, 102));
+
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Nombre");
 
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Telefono");
 
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Direccion");
 
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("NIT");
 
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Tipo Cliente");
 
         cbTipoCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mayorista", "Minorista" }));
 
+        btnVender.setBackground(new java.awt.Color(204, 0, 0));
+        btnVender.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnVender.setForeground(new java.awt.Color(255, 255, 255));
         btnVender.setText("Guardar");
+        btnVender.setBorder(null);
         btnVender.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVenderActionPerformed(evt);
             }
         });
 
+        btnVolver.setBackground(new java.awt.Color(204, 0, 0));
+        btnVolver.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(255, 255, 255));
         btnVolver.setText("Volver");
+        btnVolver.setBorder(null);
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverActionPerformed(evt);
@@ -357,16 +379,23 @@ public class Ventas extends javax.swing.JPanel {
         });
 
         txtNumeroVenta.setEditable(false);
+        txtNumeroVenta.setBackground(new java.awt.Color(0, 51, 102));
+        txtNumeroVenta.setForeground(new java.awt.Color(204, 204, 204));
 
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Numero Venta");
 
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Total Carrito");
 
         cbMetodoPago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tarjeta credito/debito", "Efectivo" }));
 
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Metodo Pago");
 
         txtTotalCarrito.setEditable(false);
+        txtTotalCarrito.setBackground(new java.awt.Color(0, 51, 102));
+        txtTotalCarrito.setForeground(new java.awt.Color(204, 204, 204));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -518,6 +547,8 @@ public class Ventas extends javax.swing.JPanel {
                 Conexion conexion1 = new Conexion();
                 con = conexion1.Connect();
                 guardarProductos("Venta", numeroVenta, carrito);
+                Conexion conexion4 = new Conexion();
+                con = conexion4.Connect();
                 pst = con.prepareStatement("INSERT INTO ventas (numero_venta, id_cliente, metodo_pago, total, fecha_venta) VALUES (?,?,?,?,NOW())");
 
                 pst.setInt(1, numeroVenta);

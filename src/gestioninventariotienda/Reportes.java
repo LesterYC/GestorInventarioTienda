@@ -1,5 +1,6 @@
 package gestioninventariotienda;
 
+import Modelo.Conexion;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -16,7 +17,6 @@ import java.awt.Desktop;
 import java.awt.Window;
 import java.io.File;
 import java.io.FileInputStream;
-import java.sql.DriverManager;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import java.io.FileOutputStream;
@@ -45,7 +45,6 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Picture;
-import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -53,7 +52,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.xmlbeans.impl.common.IOUtil;
 
 public class Reportes extends javax.swing.JPanel {
 
@@ -63,16 +61,6 @@ public class Reportes extends javax.swing.JPanel {
     
     public Reportes() {
         initComponents();
-        Connect();
-    }
-    
-    public void Connect(){
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/db_smart_shop_inventory_manager", "root", "rootpass");
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     private void ReporteExcel(String sql, String tipoReporte){
@@ -342,20 +330,30 @@ public class Reportes extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
+        jPanel1.setBackground(new java.awt.Color(0, 51, 102));
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setText("REPORTES DEL SISTEMA");
 
+        jPanel2.setBackground(new java.awt.Color(0, 51, 102));
+
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Filtros");
 
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Fecha de Inicial");
 
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Fecha de Limite");
 
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Tipos de Reportes");
 
         cbTipoArchivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "EXCEL", "PDF" }));
 
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Tipo de Archivo");
 
         jCalendar1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -439,15 +437,24 @@ public class Reportes extends javax.swing.JPanel {
                                         .addComponent(cbTipoReporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
         );
 
-        btnVolver.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel3.setBackground(new java.awt.Color(0, 51, 102));
+
+        btnVolver.setBackground(new java.awt.Color(204, 0, 0));
+        btnVolver.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(255, 255, 255));
         btnVolver.setText("Volver");
+        btnVolver.setBorder(null);
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverActionPerformed(evt);
             }
         });
 
+        btnGenerarReporte.setBackground(new java.awt.Color(204, 0, 0));
+        btnGenerarReporte.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnGenerarReporte.setForeground(new java.awt.Color(255, 255, 255));
         btnGenerarReporte.setText("Genarar Reporte");
+        btnGenerarReporte.setBorder(null);
         btnGenerarReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerarReporteActionPerformed(evt);
@@ -460,7 +467,7 @@ public class Reportes extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnGenerarReporte)
+                .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(63, 63, 63)
                 .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(268, 268, 268))
@@ -475,6 +482,7 @@ public class Reportes extends javax.swing.JPanel {
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
+        jTable1.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -545,6 +553,8 @@ public class Reportes extends javax.swing.JPanel {
                 tipoReporteProcesado = "Venta";
             }
             
+            Conexion conexion1 = new Conexion();
+            con = conexion1.Connect();
             String sql = "SELECT tipo_movimiento,numero_movimiento,codigo_producto,nombre_producto,cantidad,precio,fecha_movimiento FROM movimiento_inventario WHERE tipo_movimiento = '"+tipoReporteProcesado+"'";
 
             if (!fechaInicio.isEmpty() && !fechaFinal.isEmpty()) {
@@ -596,6 +606,8 @@ public class Reportes extends javax.swing.JPanel {
         String fechaFinal = txtFechaFinal.getText().trim();
 
         try {
+            Conexion conexion2 = new Conexion();
+            con = conexion2.Connect();
             String sql = "SELECT * FROM movimiento_inventario WHERE tipo_movimiento = ?";
 
             if (!fechaInicio.isEmpty() && !fechaFinal.isEmpty()) {

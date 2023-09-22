@@ -1,5 +1,6 @@
 package gestioninventariotienda;
 
+import Modelo.Conexion;
 import java.awt.Window;
 import java.sql.*;
 import java.sql.DriverManager;
@@ -20,16 +21,6 @@ public class EliminarCliente extends javax.swing.JPanel {
     
     public EliminarCliente() {
         initComponents();
-        Connect();
-    }
-
-    public void Connect(){
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/db_smart_shop_inventory_manager", "root", "rootpass");
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     @SuppressWarnings("unchecked")
@@ -45,16 +36,26 @@ public class EliminarCliente extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         txtIDCliente = new javax.swing.JTextField();
 
-        btnEliminar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel1.setBackground(new java.awt.Color(0, 51, 102));
+
+        jPanel2.setBackground(new java.awt.Color(0, 51, 102));
+
+        btnEliminar.setBackground(new java.awt.Color(204, 0, 0));
+        btnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("Confirmar");
+        btnEliminar.setBorder(null);
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
             }
         });
 
-        btnCancelar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnCancelar.setBackground(new java.awt.Color(204, 0, 0));
+        btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar.setText("Cancelar");
+        btnCancelar.setBorder(null);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
@@ -83,9 +84,13 @@ public class EliminarCliente extends javax.swing.JPanel {
         );
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setText("Eliminar Cliente");
 
+        jPanel3.setBackground(new java.awt.Color(0, 51, 102));
+
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("ID Cliente");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -116,7 +121,7 @@ public class EliminarCliente extends javax.swing.JPanel {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(112, 112, 112)
+                .addGap(133, 133, 133)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -151,6 +156,8 @@ public class EliminarCliente extends javax.swing.JPanel {
             int idCliente = Integer.parseInt((txtIDCliente.getText().isEmpty()) ? "0" : txtIDCliente.getText());
             
             if (idCliente != 0) {
+                Conexion conexion1 = new Conexion();
+                con = conexion1.Connect();
                 pst = con.prepareStatement("DELETE FROM clientes WHERE id=?");
                 pst.setInt(1, idCliente);
 

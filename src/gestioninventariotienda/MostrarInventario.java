@@ -1,5 +1,6 @@
 package gestioninventariotienda;
 
+import Modelo.Conexion;
 import java.awt.Window;
 import java.sql.*;
 import java.sql.PreparedStatement;
@@ -8,7 +9,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,26 +20,17 @@ public class MostrarInventario extends javax.swing.JPanel {
     
     public MostrarInventario() {
         initComponents();
-        Connect();
         Inventario();
-    }
-    
-    public void Connect(){
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/db_smart_shop_inventory_manager", "root", "rootpass");
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     public void Inventario(){
         try{
-            int q;
+            Conexion conexion1 = new Conexion();
+            con = conexion1.Connect();
             pst = con.prepareStatement("SELECT * FROM inventario");
             rs = pst.executeQuery();
             ResultSetMetaData rss = rs.getMetaData();
-            q = rss.getColumnCount();
+            rss.getColumnCount();
             
             DefaultTableModel df = (DefaultTableModel)jTable1.getModel();
             df.setRowCount(0);
@@ -51,7 +42,7 @@ public class MostrarInventario extends javax.swing.JPanel {
                     v2.add(rs.getString("codigo_producto"));
                     v2.add(rs.getString("fecha_vencimiento"));
                     v2.add(rs.getString("nombre_producto"));
-                    v2.add(rs.getString("cantidad_existente"));
+                    v2.add((rs.getString("cantidad_existente").equals("0")) ? "Agotado" : rs.getString("cantidad_existente"));
                     v2.add(rs.getString("tipo_tarifa"));
                     v2.add(rs.getString("precio_unitario"));
                     v2.add(Float.valueOf(rs.getString("cantidad_existente")) * Float.valueOf(rs.getString("precio_unitario")));
@@ -85,9 +76,14 @@ public class MostrarInventario extends javax.swing.JPanel {
         btnActualizarProducto = new javax.swing.JButton();
         jCalendar1 = new com.toedter.calendar.JCalendar();
 
+        setBackground(new java.awt.Color(0, 51, 102));
+
+        jLabel1.setBackground(new java.awt.Color(204, 0, 0));
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setText("INVENTARIO");
 
+        jTable1.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -101,13 +97,18 @@ public class MostrarInventario extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        btnRegresar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnRegresar.setBackground(new java.awt.Color(204, 0, 0));
+        btnRegresar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
         btnRegresar.setText("VOLVER");
+        btnRegresar.setBorder(null);
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegresarActionPerformed(evt);
             }
         });
+
+        jPanel1.setBackground(new java.awt.Color(0, 51, 102));
 
         cbOrden.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ASC", "DESC" }));
         cbOrden.addActionListener(new java.awt.event.ActionListener() {
@@ -124,21 +125,32 @@ public class MostrarInventario extends javax.swing.JPanel {
         });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Filtros");
 
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Fecha");
 
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Precios");
 
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Tipo Tarifa");
 
+        btnAplicarFiltros.setBackground(new java.awt.Color(204, 0, 0));
+        btnAplicarFiltros.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnAplicarFiltros.setForeground(new java.awt.Color(255, 255, 255));
         btnAplicarFiltros.setText("Filtrar");
+        btnAplicarFiltros.setBorder(null);
         btnAplicarFiltros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAplicarFiltrosActionPerformed(evt);
             }
         });
 
+        btnAgregarProducto.setBackground(new java.awt.Color(204, 0, 0));
+        btnAgregarProducto.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnAgregarProducto.setForeground(new java.awt.Color(255, 255, 255));
         btnAgregarProducto.setText("Agregar");
         btnAgregarProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,14 +158,22 @@ public class MostrarInventario extends javax.swing.JPanel {
             }
         });
 
+        btnEliminarProducto.setBackground(new java.awt.Color(204, 0, 0));
+        btnEliminarProducto.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnEliminarProducto.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminarProducto.setText("Eliminar");
+        btnEliminarProducto.setBorder(null);
         btnEliminarProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarProductoActionPerformed(evt);
             }
         });
 
+        btnActualizarProducto.setBackground(new java.awt.Color(204, 0, 0));
+        btnActualizarProducto.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnActualizarProducto.setForeground(new java.awt.Color(255, 255, 255));
         btnActualizarProducto.setText("Actualizar");
+        btnActualizarProducto.setBorder(null);
         btnActualizarProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualizarProductoActionPerformed(evt);
@@ -277,7 +297,6 @@ public class MostrarInventario extends javax.swing.JPanel {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         
-        // Cerrar la ventana actual
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
             ((JFrame) window).dispose();
@@ -315,7 +334,8 @@ public class MostrarInventario extends javax.swing.JPanel {
             String tipoTarifa = cbTipoTarifa.getSelectedItem().toString();
             String sqlTipoTarifa = (tipoTarifa.equals("Todos")) ? "" : "tipo_tarifa = ?";
             String orden = cbOrden.getSelectedItem().toString();
-
+            Conexion conexion2 = new Conexion();
+            con = conexion2.Connect();
             String sql = "SELECT * FROM inventario";
 
             if (!sqlFechaVencimiento.isEmpty() || !sqlTipoTarifa.isEmpty()) {

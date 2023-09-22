@@ -1,8 +1,8 @@
 package gestioninventariotienda;
 
+import Modelo.Conexion;
 import java.awt.Window;
 import java.sql.*;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,26 +22,17 @@ public class Usuarios extends javax.swing.JPanel {
     
     public Usuarios() {
         initComponents();
-        Connect();
         MostrarUsuarios();
-    }
-
-    public void Connect(){
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/db_smart_shop_inventory_manager", "root", "rootpass");
-        } catch (ClassNotFoundException | SQLException ex){
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     private void MostrarUsuarios(){
         try{
-            int q;
+            Conexion conexion1 = new Conexion();
+            con = conexion1.Connect();
             pst = con.prepareStatement("SELECT * FROM usuarios");
             rs = pst.executeQuery();
             ResultSetMetaData rss = rs.getMetaData();
-            q = rss.getColumnCount();
+            rss.getColumnCount();
             
             DefaultTableModel df = (DefaultTableModel)jTable1.getModel();
             df.setRowCount(0);
@@ -83,6 +74,10 @@ public class Usuarios extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         btnVolver = new javax.swing.JButton();
 
+        jPanel1.setBackground(new java.awt.Color(0, 51, 102));
+
+        jPanel2.setBackground(new java.awt.Color(0, 51, 102));
+
         txtIDUsuario.setEditable(false);
         txtIDUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,11 +91,14 @@ public class Usuarios extends javax.swing.JPanel {
             }
         });
 
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("ID Usuario");
 
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Nombre Usuario");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Filtros");
 
         txtContrasena.addActionListener(new java.awt.event.ActionListener() {
@@ -109,6 +107,7 @@ public class Usuarios extends javax.swing.JPanel {
             }
         });
 
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Contraseña Usuario");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -156,21 +155,35 @@ public class Usuarios extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        jPanel3.setBackground(new java.awt.Color(0, 51, 102));
+
+        btnAgregar.setBackground(new java.awt.Color(204, 0, 0));
+        btnAgregar.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
         btnAgregar.setText("AGREGAR");
+        btnAgregar.setBorder(null);
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarActionPerformed(evt);
             }
         });
 
+        btnActualizar.setBackground(new java.awt.Color(204, 0, 0));
+        btnActualizar.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnActualizar.setForeground(new java.awt.Color(255, 255, 255));
         btnActualizar.setText("ACTUALIZAR");
+        btnActualizar.setBorder(null);
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualizarActionPerformed(evt);
             }
         });
 
+        btnEliminar.setBackground(new java.awt.Color(204, 0, 0));
+        btnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("ELIMINAR");
+        btnEliminar.setBorder(null);
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
@@ -185,7 +198,7 @@ public class Usuarios extends javax.swing.JPanel {
                 .addGap(126, 126, 126)
                 .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(108, 108, 108)
-                .addComponent(btnActualizar)
+                .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(92, 92, 92))
@@ -201,6 +214,7 @@ public class Usuarios extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        jTable1.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -220,10 +234,16 @@ public class Usuarios extends javax.swing.JPanel {
         jScrollPane1.setViewportView(jTable1);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setText("USUARIOS");
 
-        btnVolver.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel4.setBackground(new java.awt.Color(0, 51, 102));
+
+        btnVolver.setBackground(new java.awt.Color(204, 0, 0));
+        btnVolver.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(255, 255, 255));
         btnVolver.setText("Volver");
+        btnVolver.setBorder(null);
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverActionPerformed(evt);
@@ -303,6 +323,8 @@ public class Usuarios extends javax.swing.JPanel {
             String contrasena = txtContrasena.getText();
             
             if (!nombreUsuario.isEmpty() && !contrasena.isEmpty()) {
+                Conexion conexion2 = new Conexion();
+                con = conexion2.Connect();
                 pst = con.prepareStatement("SELECT * FROM usuarios WHERE usuario=?");
                 pst.setString(1, nombreUsuario);
                 rs = pst.executeQuery();
@@ -310,6 +332,8 @@ public class Usuarios extends javax.swing.JPanel {
                 if (rs.next() == true) {
                     JOptionPane.showMessageDialog(this, "¡El usuario ya existe!");
                 } else {
+                    Conexion conexion3 = new Conexion();
+                    con = conexion3.Connect();
                     pst = con.prepareStatement("INSERT INTO usuarios (usuario, contrasena) VALUES (?,?)");
                     pst.setString(1, nombreUsuario);
                     pst.setString(2, contrasena);
@@ -339,6 +363,8 @@ public class Usuarios extends javax.swing.JPanel {
             String contrasena = txtContrasena.getText();
 
             if (idUsuario != 0 && !nombreUsuario.isEmpty() && !contrasena.isEmpty()) {
+                Conexion conexion4 = new Conexion();
+                con = conexion4.Connect();
                 pst = con.prepareStatement("UPDATE usuarios SET usuario=?, contrasena=? WHERE id=?");
 
                 pst.setString(1, nombreUsuario);
@@ -365,6 +391,8 @@ public class Usuarios extends javax.swing.JPanel {
             int idUsuario = Integer.parseInt((txtIDUsuario.getText().isEmpty()) ? "0" : txtIDUsuario.getText());
 
             if (idUsuario != 0) {
+                Conexion conexion5 = new Conexion();
+                con = conexion5.Connect();
                 pst = con.prepareStatement("DELETE FROM usuarios WHERE id=?");
 
                 pst.setInt(1, idUsuario);
@@ -408,6 +436,8 @@ public class Usuarios extends javax.swing.JPanel {
     private void txtNombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreUsuarioActionPerformed
         try{
             String nombreUsuario = txtNombreUsuario.getText();
+            Conexion conexion6 = new Conexion();
+            con = conexion6.Connect();
             pst = con.prepareStatement("SELECT * FROM usuarios WHERE usuario=?");
             pst.setString(1, nombreUsuario);
             rs=pst.executeQuery();
@@ -435,6 +465,8 @@ public class Usuarios extends javax.swing.JPanel {
         txtContrasena.setText(jTable1.getValueAt(filaSeleccinada, 2).toString());
         try{
             int idUsuario = Integer.parseInt(txtIDUsuario.getText());
+            Conexion conexion7 = new Conexion();
+            con = conexion7.Connect();
             pst = con.prepareStatement("SELECT * FROM usuarios WHERE id=?");
             pst.setInt(1, idUsuario);
             rs=pst.executeQuery();

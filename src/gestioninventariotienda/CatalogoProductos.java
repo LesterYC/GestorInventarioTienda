@@ -58,7 +58,7 @@ public class CatalogoProductos extends javax.swing.JPanel {
                 for (int a = 0; a < 10; a++){
                     v2.add(rs.getString("codigo_producto"));
                     v2.add(rs.getString("nombre_producto"));
-                    v2.add(rs.getString("cantidad_existente"));
+                    v2.add((rs.getString("cantidad_existente").equals("0")) ? "Agotado" : rs.getString("cantidad_existente"));
                     v2.add(rs.getString("precio_unitario"));
                 }
                 df.addRow(v2);
@@ -114,9 +114,13 @@ public class CatalogoProductos extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
 
+        jPanel1.setBackground(new java.awt.Color(0, 51, 102));
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setText("CATALOGO DE PRODUCTOS");
 
+        jTable2.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -132,6 +136,9 @@ public class CatalogoProductos extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(jTable2);
 
+        jPanel2.setBackground(new java.awt.Color(0, 51, 102));
+
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Codigo Producto");
 
         txtCodigoProducto.addActionListener(new java.awt.event.ActionListener() {
@@ -141,18 +148,30 @@ public class CatalogoProductos extends javax.swing.JPanel {
         });
 
         txtTotalCarrito.setEditable(false);
+        txtTotalCarrito.setBackground(new java.awt.Color(0, 51, 102));
+        txtTotalCarrito.setForeground(new java.awt.Color(204, 204, 204));
 
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Total Carrito");
 
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Tipo Operacion");
 
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Cantidad");
 
         txtNombreProducto.setEditable(false);
+        txtNombreProducto.setBackground(new java.awt.Color(0, 51, 102));
+        txtNombreProducto.setForeground(new java.awt.Color(204, 204, 204));
 
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Nombre Producto");
 
+        btnAgregarCarrito.setBackground(new java.awt.Color(204, 0, 0));
+        btnAgregarCarrito.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnAgregarCarrito.setForeground(new java.awt.Color(255, 255, 255));
         btnAgregarCarrito.setText("Agregar al Carrito");
+        btnAgregarCarrito.setBorder(null);
         btnAgregarCarrito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarCarritoActionPerformed(evt);
@@ -160,23 +179,39 @@ public class CatalogoProductos extends javax.swing.JPanel {
         });
 
         txtNumeroOperacion.setEditable(false);
+        txtNumeroOperacion.setBackground(new java.awt.Color(0, 51, 102));
+        txtNumeroOperacion.setForeground(new java.awt.Color(204, 204, 204));
 
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Numero Orden");
 
         txtPrecioProducto.setEditable(false);
+        txtPrecioProducto.setBackground(new java.awt.Color(0, 51, 102));
+        txtPrecioProducto.setForeground(new java.awt.Color(204, 204, 204));
 
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Precio");
 
         txtTipoOperacion.setEditable(false);
+        txtTipoOperacion.setBackground(new java.awt.Color(0, 51, 102));
+        txtTipoOperacion.setForeground(new java.awt.Color(204, 204, 204));
 
+        btnEliminarCarrito.setBackground(new java.awt.Color(204, 0, 0));
+        btnEliminarCarrito.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnEliminarCarrito.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminarCarrito.setText("Eliminar del Carrito");
+        btnEliminarCarrito.setBorder(null);
         btnEliminarCarrito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarCarritoActionPerformed(evt);
             }
         });
 
+        btnActualizarCarrito.setBackground(new java.awt.Color(204, 0, 0));
+        btnActualizarCarrito.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnActualizarCarrito.setForeground(new java.awt.Color(255, 255, 255));
         btnActualizarCarrito.setText("Actualizar Carrito");
+        btnActualizarCarrito.setBorder(null);
         btnActualizarCarrito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualizarCarritoActionPerformed(evt);
@@ -220,7 +255,7 @@ public class CatalogoProductos extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(btnActualizarCarrito, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnEliminarCarrito)))
+                        .addComponent(btnEliminarCarrito, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -269,14 +304,18 @@ public class CatalogoProductos extends javax.swing.JPanel {
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
+        btnProcesarOrden.setBackground(new java.awt.Color(204, 0, 0));
         btnProcesarOrden.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnProcesarOrden.setForeground(new java.awt.Color(255, 255, 255));
         btnProcesarOrden.setText("Procesar Orden");
+        btnProcesarOrden.setBorder(null);
         btnProcesarOrden.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProcesarOrdenActionPerformed(evt);
             }
         });
 
+        jTable1.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -296,10 +335,14 @@ public class CatalogoProductos extends javax.swing.JPanel {
         jScrollPane2.setViewportView(jTable1);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(204, 0, 0));
         jLabel4.setText("Carrito de compras");
 
+        btnVolver.setBackground(new java.awt.Color(204, 0, 0));
         btnVolver.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(255, 255, 255));
         btnVolver.setText("Volver");
+        btnVolver.setBorder(null);
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverActionPerformed(evt);
@@ -424,6 +467,15 @@ public class CatalogoProductos extends javax.swing.JPanel {
 
             if (rs.next()) {
                 cantidadBD = rs.getInt("cantidad_existente");
+                txtCodigoProducto.setText("");
+                txtNombreProducto.setText("");
+                txtCantidadProducto.setText("");
+                txtPrecioProducto.setText("");
+            }
+            
+            if (cantidadBD == 0 && tipoMovimiento.equals("Venta")) {
+                JOptionPane.showMessageDialog(null, "El producto no se puede comprar porque no hay existencias.", "Alerta", JOptionPane.WARNING_MESSAGE);
+                return;
             }
 
             if (tipoMovimiento.equals("Venta")) {
@@ -483,8 +535,8 @@ public class CatalogoProductos extends javax.swing.JPanel {
 
     private void txtCodigoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProductoActionPerformed
         try{
-            Conexion conexion1 = new Conexion();
-            con = conexion1.Connect();
+            Conexion conexion4 = new Conexion();
+            con = conexion4.Connect();
             int codigoProducto = Integer.parseInt(txtCodigoProducto.getText());
             pst = con.prepareStatement("SELECT * FROM inventario WHERE codigo_producto=?");
             pst.setInt(1, codigoProducto);
@@ -570,8 +622,8 @@ public class CatalogoProductos extends javax.swing.JPanel {
             float precioProducto = Float.parseFloat(txtPrecioProducto.getText());
             int cantidadBD = 0;
 
-            Conexion conexion3 = new Conexion();
-            con = conexion3.Connect();
+            Conexion conexion5 = new Conexion();
+            con = conexion5.Connect();
             pst = con.prepareStatement("SELECT cantidad_existente FROM inventario WHERE codigo_producto = ?");
             pst.setInt(1, codigoProducto);
             rs = pst.executeQuery();

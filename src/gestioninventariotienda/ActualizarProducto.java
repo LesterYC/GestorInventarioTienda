@@ -1,6 +1,7 @@
 
 package gestioninventariotienda;
 
+import Modelo.Conexion;
 import java.awt.Window;
 import java.sql.*;
 import java.sql.PreparedStatement;
@@ -19,18 +20,6 @@ public class ActualizarProducto extends javax.swing.JPanel {
     
     public ActualizarProducto() {
         initComponents();
-        Connect();
-    }
-    
-    public void Connect(){
-        try
-        {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/db_smart_shop_inventory_manager", "root", "rootpass");
-        } catch (ClassNotFoundException | SQLException ex)
-        {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     @SuppressWarnings("unchecked")
@@ -55,16 +44,26 @@ public class ActualizarProducto extends javax.swing.JPanel {
         txtTipoTarifa = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
 
-        btnActualizar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        setBackground(new java.awt.Color(0, 51, 102));
+
+        jPanel7.setBackground(new java.awt.Color(0, 51, 102));
+
+        btnActualizar.setBackground(new java.awt.Color(204, 0, 0));
+        btnActualizar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnActualizar.setForeground(new java.awt.Color(255, 255, 255));
         btnActualizar.setText("Actualizar");
+        btnActualizar.setBorder(null);
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualizarActionPerformed(evt);
             }
         });
 
-        btnCancelar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnCancelar.setBackground(new java.awt.Color(204, 0, 0));
+        btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar.setText("Cancelar");
+        btnCancelar.setBorder(null);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
@@ -92,7 +91,10 @@ public class ActualizarProducto extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        jPanel8.setBackground(new java.awt.Color(0, 51, 102));
+
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Codigo Producto");
 
         txtCodigoProducto.addActionListener(new java.awt.event.ActionListener() {
@@ -108,6 +110,7 @@ public class ActualizarProducto extends javax.swing.JPanel {
         });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Nombre Producto");
 
         txtCantidadProducto.addActionListener(new java.awt.event.ActionListener() {
@@ -117,6 +120,7 @@ public class ActualizarProducto extends javax.swing.JPanel {
         });
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Cantidad Producto");
 
         txtPrecioProducto.addActionListener(new java.awt.event.ActionListener() {
@@ -126,12 +130,15 @@ public class ActualizarProducto extends javax.swing.JPanel {
         });
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Precio Producto");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Tipo Tarifa");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Fecha Vencimiento");
 
         txtFechaVencimiento.addActionListener(new java.awt.event.ActionListener() {
@@ -178,41 +185,37 @@ public class ActualizarProducto extends javax.swing.JPanel {
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(21, 21, 21)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtCodigoProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtCantidadProducto))
                     .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCodigoProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtNombreProducto)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(20, 20, 20)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7))
                         .addGap(41, 41, 41))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addGap(4, 4, 4)))
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtFechaVencimiento, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                            .addComponent(txtTipoTarifa)
-                            .addComponent(txtPrecioProducto))))
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(txtFechaVencimiento, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                        .addComponent(txtTipoTarifa)
+                        .addComponent(txtPrecioProducto)))
                 .addGap(12, 12, 12))
         );
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setText("Actualizar Producto");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -246,50 +249,58 @@ public class ActualizarProducto extends javax.swing.JPanel {
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         try {
-            int codigProducto = Integer.parseInt((txtCodigoProducto.getText().isEmpty()) ? "0" : txtCodigoProducto.getText());
+            int codigoProducto = Integer.parseInt((txtCodigoProducto.getText().isEmpty()) ? "0" : txtCodigoProducto.getText());
             String nombreProducto = txtNombreProducto.getText();
-            int cantidadProducto = Integer.parseInt(txtCantidadProducto.getText());
+            int cantidadProducto = Integer.parseInt((txtCantidadProducto.getText().isEmpty()) ? "0" : txtCantidadProducto.getText());
             String tarifa = txtTipoTarifa.getSelectedItem().toString();
-            float precioUnitario = Float.parseFloat(txtPrecioProducto.getText());
-            Date fechaVencimiento = Date.valueOf(txtFechaVencimiento.getText());
-            
-            if (codigProducto !=0 && !nombreProducto.isEmpty() && !tarifa.isEmpty() && !txtPrecioProducto.getText().isEmpty() && !txtFechaVencimiento.getText().isEmpty()) {
-                pst = con.prepareStatement("UPDATE inventario SET nombre_producto=?, cantidad_existente=?, tipo_tarifa=?, precio_unitario=?, fecha_vencimiento=? WHERE codigo_producto=?");
+            float precioUnitario = Float.parseFloat((txtPrecioProducto.getText().isEmpty()) ? "0.00" : txtPrecioProducto.getText());
 
-                pst.setString(1, nombreProducto);
-                pst.setInt(2, cantidadProducto);
-                pst.setString(3, tarifa);
-                pst.setFloat(4, precioUnitario);
-                pst.setDate(5, fechaVencimiento);
-                pst.setInt(6, codigProducto);
+            String fechaVencimientoText = txtFechaVencimiento.getText();
 
-                if (pst.executeUpdate() == 1) {
-                    JOptionPane.showMessageDialog(this, "Producto Actualizado Correctamente");
-                    txtCodigoProducto.setText("");
-                    txtNombreProducto.setText("");
-                    txtCantidadProducto.setText("");
-                    txtPrecioProducto.setText("");
-                    txtFechaVencimiento.setText("");
+            if (codigoProducto != 0 && !nombreProducto.isEmpty() && !tarifa.isEmpty() && !txtPrecioProducto.getText().isEmpty() && !fechaVencimientoText.isEmpty()) {
+                if (fechaVencimientoText.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                    Date fechaVencimiento = Date.valueOf(fechaVencimientoText);
 
-                    JFrame frame = new JFrame("Inventario");
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    MostrarInventario inventario = new MostrarInventario();
-                    frame.getContentPane().add(inventario);
-                    frame.pack();
-                    frame.setLocationRelativeTo(null);
-                    frame.setVisible(true);
+                    Conexion conexion1 = new Conexion();
+                    con = conexion1.Connect();
+                    pst = con.prepareStatement("UPDATE inventario SET nombre_producto=?, cantidad_existente=?, tipo_tarifa=?, precio_unitario=?, fecha_vencimiento=? WHERE codigo_producto=?");
 
-                    // Cerrar la ventana actual
-                    Window window = SwingUtilities.getWindowAncestor(this);
-                    if (window instanceof JFrame) {
-                        ((JFrame) window).dispose();
+                    pst.setString(1, nombreProducto);
+                    pst.setInt(2, cantidadProducto);
+                    pst.setString(3, tarifa);
+                    pst.setFloat(4, precioUnitario);
+                    pst.setDate(5, fechaVencimiento);
+                    pst.setInt(6, codigoProducto);
+
+                    if (pst.executeUpdate() == 1) {
+                        JOptionPane.showMessageDialog(this, "Producto Actualizado Correctamente");
+                        txtCodigoProducto.setText("");
+                        txtNombreProducto.setText("");
+                        txtCantidadProducto.setText("");
+                        txtPrecioProducto.setText("");
+                        txtFechaVencimiento.setText("");
+
+                        JFrame frame = new JFrame("Inventario");
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        MostrarInventario inventario = new MostrarInventario();
+                        frame.getContentPane().add(inventario);
+                        frame.pack();
+                        frame.setLocationRelativeTo(null);
+                        frame.setVisible(true);
+
+                        Window window = SwingUtilities.getWindowAncestor(this);
+                        if (window instanceof JFrame) {
+                            ((JFrame) window).dispose();
+                        }
                     }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Formato de fecha inválido. Utilice el formato aaaa-mm-dd.", "Alerta", JOptionPane.WARNING_MESSAGE);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Alerta", JOptionPane.WARNING_MESSAGE);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "El producto no existe.", "Alerta", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
@@ -311,6 +322,8 @@ public class ActualizarProducto extends javax.swing.JPanel {
     private void txtCodigoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProductoActionPerformed
         try{
             String codigo = txtCodigoProducto.getText();
+            Conexion conexion2 = new Conexion();
+            con = conexion2.Connect();
             pst = con.prepareStatement("SELECT * FROM inventario WHERE codigo_producto=?");
             pst.setString(1, codigo);
             rs=pst.executeQuery();
@@ -329,7 +342,7 @@ public class ActualizarProducto extends javax.swing.JPanel {
                 txtPrecioProducto.setText(rs.getString(6));
                 txtFechaVencimiento.setText(rs.getString(7));
             } else{
-                JOptionPane.showMessageDialog(this, "Fallo la consulta de datos");
+                JOptionPane.showMessageDialog(this, "No existe el producto");
             }
         } catch (SQLException ex){
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
@@ -339,6 +352,8 @@ public class ActualizarProducto extends javax.swing.JPanel {
     private void txtNombreProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreProductoActionPerformed
         try{
             String nombre = txtNombreProducto.getText();
+            Conexion conexion3 = new Conexion();
+            con = conexion3.Connect();
             pst = con.prepareStatement("SELECT * FROM inventario WHERE nombre_producto=?");
             pst.setString(1, nombre);
             rs=pst.executeQuery();
@@ -357,7 +372,7 @@ public class ActualizarProducto extends javax.swing.JPanel {
                 txtPrecioProducto.setText(rs.getString(6));
                 txtFechaVencimiento.setText(rs.getString(7));
             } else{
-                JOptionPane.showMessageDialog(this, "Fallo la consulta de datos");
+                JOptionPane.showMessageDialog(this, "No existe el producto");
             }
         } catch (SQLException ex){
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);

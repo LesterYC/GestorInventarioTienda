@@ -237,6 +237,8 @@ public class Compras extends javax.swing.JPanel {
         int cantidadProductoBD = 0;
         int cantidadTotal = 0;
         try {
+            Conexion conexion1 = new Conexion();
+            con = conexion1.Connect();
             pst = con.prepareStatement("SELECT cantidad_existente FROM inventario WHERE codigo_producto=?");
             pst.setInt(1, codigoProducto);
             rs = pst.executeQuery();
@@ -252,6 +254,8 @@ public class Compras extends javax.swing.JPanel {
         }
 
         try {
+            Conexion conexion2 = new Conexion();
+            con = conexion2.Connect();
             pst = con.prepareStatement("UPDATE inventario SET cantidad_existente=? WHERE codigo_producto=?");
             cantidadTotal = cantidadProductoBD + cantidadProducto;
             pst.setInt(1, cantidadTotal);
@@ -283,31 +287,52 @@ public class Compras extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        txtNumeroCompra.setEditable(false);
+        setBackground(new java.awt.Color(0, 51, 102));
 
+        txtNumeroCompra.setEditable(false);
+        txtNumeroCompra.setBackground(new java.awt.Color(0, 51, 102));
+        txtNumeroCompra.setForeground(new java.awt.Color(204, 204, 204));
+
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Numero Compra");
 
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Total Carrito");
 
         txtTotalCarrito.setEditable(false);
+        txtTotalCarrito.setBackground(new java.awt.Color(0, 51, 102));
+        txtTotalCarrito.setForeground(new java.awt.Color(204, 204, 204));
 
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Nombre Proveedor");
 
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Metodo Pago");
 
         cbMetodoPago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tarjeta credito/debito", "efectivo" }));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setText("REGISTRAR COMPRA");
 
+        jPanel1.setBackground(new java.awt.Color(0, 51, 102));
+
+        btnComprar.setBackground(new java.awt.Color(204, 0, 0));
+        btnComprar.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnComprar.setForeground(new java.awt.Color(255, 255, 255));
         btnComprar.setText("Guardar");
+        btnComprar.setBorder(null);
         btnComprar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnComprarActionPerformed(evt);
             }
         });
 
+        btnVolver.setBackground(new java.awt.Color(204, 0, 0));
+        btnVolver.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(255, 255, 255));
         btnVolver.setText("Volver");
+        btnVolver.setBorder(null);
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverActionPerformed(evt);
@@ -335,6 +360,7 @@ public class Compras extends javax.swing.JPanel {
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
+        jTable1.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -430,8 +456,8 @@ public class Compras extends javax.swing.JPanel {
             Float totalCarrito = Float.valueOf(txtTotalCarrito.getText());
             
             if (!nombreProveedor.isEmpty()) {
-                Conexion conexion1 = new Conexion();
-                con = conexion1.Connect();
+                Conexion conexion3 = new Conexion();
+                con = conexion3.Connect();
                 guardarProductos("Compra", numeroCompra, carrito);
                 pst = con.prepareStatement("INSERT INTO compras (numero_compra, nombre_proveedor, metodo_pago, total, fecha_compra) VALUES (?,?,?,?,NOW())");
                 pst.setInt(1, numeroCompra);
